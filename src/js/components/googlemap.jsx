@@ -77,7 +77,7 @@ export default class GoogleMap extends React.Component {
     });
     var marker = new google.maps.Marker({position: latlng, map: this.map, title: 'jaa'});
     if (color !== undefined){
-      
+
     }
     return marker;
 

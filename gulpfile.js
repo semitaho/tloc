@@ -92,16 +92,6 @@ gulp.task('test', function () {
         }));
 });
 
-gulp.task('deploy', function () {
-    return gulp.src(webrootdir + '/**')
-        .pipe(ftp({
-            host: 'www.elisanet.fi',
-            user: 'd639809',
-            pass: 'kurkottava'
-        }))
-        .pipe(gutil.noop());
-
-});
 
 gulp.task('build', ['templates']);
 gulp.task('default', ['jade', 'compilejs', 'copycss', 'styles', 'watch', 'webserver']);
