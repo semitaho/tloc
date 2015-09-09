@@ -1,0 +1,35 @@
+@import "animation"
+
+
+body
+  background #f7f6f5
+  height 100%
+
+html
+  height 100%
+.mainloc
+  -webkit-animation fadein 2s
+
+.question
+  opacity 0
+  webkit-animation-fill-mode forwards
+  animation-fill-mode forwards
+  -webkit-animation fadein ease-in 2s forwards
+  animation fadein ease-in 2s forwards
+  animation-delay 1s
+
+.todo
+  transition-property left
+  transition-duration 2s
+  transition-timing-function linear
+  transition-delay 1s
+
+
+.fe_container
+  animation fadein .5s
+  -webkit-animation fadein .5s
+
+#map
+  height 200px
+.mapheight, .map-gic
+  height 100%

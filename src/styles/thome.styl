@@ -1,0 +1,178 @@
+@import "variables"
+@import "animation"
+
+body
+  height 100%
+  box-sizing border-box
+
+.data, .fe_container
+  animation fadein .5s
+  -webkit-animation fadein .5s
+
+.data-animation
+  -webkit-transition: opacity 1s ease-in-out;
+  -moz-transition: opacity 1s ease-in-out;
+  -o-transition: opacity 1s ease-in-out;
+  transition: opacity 1s ease-in-out;
+
+.content
+  color headercolor
+  position absolute
+  background #f2f2f2
+  white-space nowrap
+  padding 1em
+  color: black;
+  bottom 0
+  overflow-y auto
+  font-weight normal
+  font-size 1.5em
+  border-radius 15px
+
+  top 20%
+  left 15%
+  right 15%
+  bottom 0
+
+
+
+.leftsidebar
+  background headercolor
+
+
+
+
+header
+  background  headercolor
+
+footer
+  background  headercolor
+
+.profile
+  width 50%
+  text-align center
+.hidden {
+  display none
+  -webkit-animation fadeout 1s
+}
+
+.visible {
+  -webkit-animation fadein 1s
+}
+
+
+video
+  height 100% !important
+  width auto
+  background black
+footer
+  bottom 0
+header
+  .tracker
+    padding-top: 10px;
+    padding-bottom: 10px;
+    line-height: 20px;
+    color white
+    margin-top auto
+    margin-bottom auto
+  nav
+    .active
+      font-weight bold
+
+    //animation headernav 3s 3s forwards
+    //-webkit-animation headernava 2s .5s forwards
+    a
+      color white
+      //font-size 2em
+      //box-sizing border-box
+
+      &:hover
+        text-decoration underline
+        background lightenlinkcolor
+
+
+
+label
+  display block
+.react-markdown-textarea__textarea, #title
+  width 90%
+
+.react-markdown-textarea__nav
+  display none
+
+.titlebox
+
+  margin-bottom 1em
+  .titlelabel
+    padding 1em
+  input
+    padding: 2px;
+    border: 1px solid #999;
+    font-size: 10pt;
+    background-color: #fff;
+    max-width: 100%;
+
+
+.introduction
+  white-space normal
+
+  .info
+    -webkit-animation fadein 2s
+    box-sizing border-box
+    min-height 100%
+    border-top 1px solid bloginfo
+    border-bottom 1px solid bloginfo
+    margin 1em 0
+    height 2em
+    padding 0 0
+
+    line-height 2em
+    font-size .7em;
+    width 100%
+    .details
+      float left
+
+    .edit
+      float right
+
+  section
+    margin-top 1em
+
+
+.breadcrumbs
+  position absolute
+  top 0
+
+.record_table
+  width 100%
+  margin-top 2em
+  border-collapse collapse
+
+
+.follow
+  position static
+  margin-right 0
+  margin-left auto
+  background none
+  text-align right
+
+article
+  .info
+
+    .edit
+      float right
+  .footer
+    background none
+
+.horizontal-center
+  -webkit-transform translateY(50%)
+  -ms-transform translateY(50%)
+  transform translateY(50%)
+
+.apiloader
+  animation fadein .5s
+  -webkit-animation fadein .5s
+  animation-direction alternate
+  animation-iteration-count infinite
+
+.hide
+  animation fadeout 1s
