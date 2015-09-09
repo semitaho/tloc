@@ -18,7 +18,7 @@ export default class GoogleMap extends React.Component {
       this.currentMarker.setMap(null);
     }
 
-    this.currentMarker = this.createMarker(event.location, event.name, "http://maps.google.com/mapfiles/ms/icons/blue-dot.png");
+    this.currentMarker = this.createMarker(event.location, event.name, event.icon);
   }
 
   render() {
@@ -26,8 +26,9 @@ export default class GoogleMap extends React.Component {
     var restaurants = '';
     if (this.state.restaurants) {
       restaurants = <div className="list-group">{this.state.restaurants.map(function (restaurant) {
-        return (<a className="list-group-item" onClick={this.handleClick.bind(this,restaurant)}>
+        return (<a className="list-group-item" onMouseOver={this.handleClick.bind(this,restaurant)}>
           <h4 className="list-group-item-heading">{restaurant.name}</h4>
+          <h5>{restaurant.vicinity}</h5>
 
           <p className="list-group-item-text">Distance: {restaurant.distance.text}</p>
 
@@ -42,17 +43,15 @@ export default class GoogleMap extends React.Component {
       <div className="caption">
         <h1 className="text-center question">What do you want to do?</h1>
 
-        <div id="map"/>
-        <ul className="nav nav-pills nav-stacked text-center">
-          <li>
+        <div className="row">
+          <div className="col-md-6">
             <button type="button" className="btn btn-info btn-block">Go to eat</button>
-            {restaurants}
+          </div>
 
-          </li>
-          <li className="todo">
-            <a>Check weather</a>
-          </li>
-        </ul>
+        </div>
+        <div id="map"/>
+        {restaurants}
+
       </div>
     )
 
@@ -76,7 +75,8 @@ export default class GoogleMap extends React.Component {
       content: '<h1>' + label + '</h1>'
     });
     var marker = new google.maps.Marker({position: latlng, map: this.map, title: 'jaa'});
-    if (color !== undefined){
+    if (color !== undefined) {
+      marker.setIcon(color);
 
     }
     return marker;
@@ -114,7 +114,12 @@ export default class GoogleMap extends React.Component {
     console.log('restaurants', results);
 
     var restaurantsNearby = results.map(function (result) {
-      return {name: result.name, location: {lat: result.geometry.location.G, lng: result.geometry.location.K}};
+      return {
+        name: result.name,
+        vicinity: result.vicinity,
+        icon: result.icon,
+        location: {lat: result.geometry.location.G, lng: result.geometry.location.K}
+      };
     });
 
     var createMarker = this.createMarker;
