@@ -60,6 +60,7 @@ export default class GoogleMap extends React.Component {
   componentDidMount() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(this.initGoogleMaps, this.onError, this.geoOptions);
+
     }
 
   }
@@ -96,8 +97,10 @@ export default class GoogleMap extends React.Component {
       zoomControl: false
     });
 
+    google.maps.event.trigger(this.map, "resize");
     this.createMarker(latlng, 'you');
     this.initRestaurants(latlng);
+
   }
 
   initRestaurants(latlng) {
