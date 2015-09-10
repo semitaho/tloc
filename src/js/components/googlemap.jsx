@@ -66,36 +66,10 @@ export default class GoogleMap extends React.Component {
   }
 
 
-  parseLatLng(data) {
-    return {lat: data.coords.latitude, lng: data.coords.longitude};
-
-  }
-
-  createMarker(latlng, label, color) {
-    var infowindow = new google.maps.InfoWindow({
-      content: '<h1>' + label + '</h1>'
-    });
-    var marker = new google.maps.Marker({position: latlng, map: this.map, title: 'jaa'});
-    if (color !== undefined) {
-      marker.setIcon(color);
-
-    }
-    return marker;
-
-  }
-
 
   initGoogleMaps(data) {
     var latlng = this.parseLatLng(data);
-    this.origin = new google.maps.LatLng(latlng.lat, latlng.lng);
-    console.log('on goog', latlng);
-    this.map = new google.maps.Map(document.getElementById('map'), {
-      center: latlng,
-      zoom: 14,
-      linksControl: false,
-      scrollwheel: false,
-      zoomControl: false
-    });
+
 
     google.maps.event.trigger(this.map, "resize");
     this.createMarker(latlng, 'you');
@@ -114,53 +88,9 @@ export default class GoogleMap extends React.Component {
   }
 
   restaurantsFound(results) {
-    console.log('restaurants', results);
 
-    var restaurantsNearby = results.map(function (result) {
-      return {
-        name: result.name,
-        vicinity: result.vicinity,
-        icon: result.icon,
-        location: {lat: result.geometry.location.G, lng: result.geometry.location.K}
-      };
-    });
-
-    var createMarker = this.createMarker;
-    var destinations = [];
-    restaurantsNearby.forEach(function (restaurant) {
-
-      destinations.push(new google.maps.LatLng(restaurant.location.lat, restaurant.location.lng));
-    });
-
-    this.fillDistances(restaurantsNearby, destinations);
     //
   }
 
-  fillDistances(restaurantsNearby, destinations) {
-    var service = new google.maps.DistanceMatrixService();
-    service.getDistanceMatrix({
-      origins: [this.origin],
-      destinations: destinations,
-      travelMode: google.maps.TravelMode.WALKING
-    }, function (data) {
-      this.onDistance(data, restaurantsNearby);
-    }.bind(this));
-  }
-
-  onDistance(data, restaurantsNearby) {
-    restaurantsNearby.forEach((restaurant, index) => {
-      var element = data.rows[0].elements[index];
-      restaurant.distance = element.distance;
-      restaurant.duration = element.duration;
-
-    });
-
-    console.log('distances', restaurantsNearby);
-    restaurantsNearby.sort((a, b) => {
-      return a.distance.value - b.distance.value;
-    });
-    this.setState({restaurants: restaurantsNearby});
-
-  }
 
 }

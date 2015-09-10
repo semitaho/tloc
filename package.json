@@ -4,20 +4,21 @@
   "description": "tloc interactive service",
   "main": "gulpfile.js",
   "dependencies": {
-    "gulp-jade": "^1.1.0",
     "babelify": "^6.3.0",
+    "browserify": "^11.0.1",
     "gulp": "^3.9.0",
+    "gulp-jade": "^1.1.0",
     "gulp-jest": "^0.4.0",
     "gulp-plumber": "^1.0.1",
-    "browserify": "^11.0.1",
-    "react": "^0.13.3",
-    "jquery": "^2.1.4",
-    "gulp-webserver": "^0.9.1",
     "gulp-react": "^3.0.1",
     "gulp-stylus": "^2.0.6",
+    "gulp-webserver": "^0.9.1",
+    "jquery": "^2.1.4",
     "nib": "^1.1.0",
-    "vinyl-source-stream": "^1.1.0",
-    "react-google-maps": "^2.1.0"
+    "react": "^0.13.3",
+    "react-google-maps": "^2.1.0",
+    "react-router": "^0.13.3",
+    "vinyl-source-stream": "^1.1.0"
   },
   "devDependencies": {},
   "scripts": {

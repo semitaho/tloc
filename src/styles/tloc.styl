@@ -1,9 +1,13 @@
 @import "animation"
+@import "variables"
+
+
 
 
 body
   background #f7f6f5
   height 100%
+
 
 html
   height 100%
@@ -14,9 +18,19 @@ html
   opacity 0
   webkit-animation-fill-mode forwards
   animation-fill-mode forwards
-  -webkit-animation fadein ease-in 2s forwards
-  animation fadein ease-in 2s forwards
+  -webkit-animation fadein ease-in 1s forwards
+  animation fadein ease-in 1s forwards
   animation-delay 1s
+
+.answer
+  webkit-animation-fill-mode forwards
+  animation-fill-mode forwards
+  -webkit-animation fadein ease-in 1s forwards
+  animation fadein ease-in 1s forwards
+  animation-delay 1s
+  opacity 0
+
+
 
 .todo
   transition-property left

@@ -76,7 +76,7 @@ gulp.task('styles', function () {
 gulp.task('webserver', function () {
     return gulp.src(webrootdir).pipe(webserver({
         livereload: true,
-        open: 'http://0.0.0.0:9001/index.html',
+        open: 'http://localhost:9001/index.html',
         port: 9001,
         host: '0.0.0.0'
     }));

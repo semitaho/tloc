@@ -15,7 +15,6 @@ export default class Tracker extends React.Component {
     this.onError = this.onError.bind(this);
     this.onSuccessGeocoder = this.onSuccessGeocoder.bind(this);
     this.state = {coords: {}}
-    this.geoOptions = {enableHighAccuracy: true};
     this.apiKey = 'ef4a3DUIqVmshrkjhj6Q4N3nqMWfp1cHSWcjsnlvYb0lWbHPUE';
   }
 
@@ -26,46 +25,14 @@ export default class Tracker extends React.Component {
 
   }
 
-  onNewPosition(location) {
-    var geocoder = new google.maps.Geocoder;
-    var latlng = {
-      lat: location.coords.latitude,
-      lng: location.coords.longitude
-    };
-    this.setState({latlng: latlng});
-
-    geocoder.geocode(
-      {'location': latlng}, this.onSuccessGeocoder);
-
-  }
-
-
-
-  onError(error) {
-    this.setState({error: true});
-  }
 
   getApiLocation(results) {
-    var apiLocation = '';
-    results.forEach(function (result) {
-      if (result.types.indexOf('locality') > -1) {
-        apiLocation = result.formatted_address;
-      }
 
-    });
-    return apiLocation;
 
   }
 
   onSuccessGeocoder(result, status) {
-    if (status == google.maps.GeocoderStatus.OK) {
-      if (result[0]) {
-        var location = result[0].formatted_address;
-        var apiLocation = this.getApiLocation(result);
 
-        this.setState({location: location, apilocation: apiLocation});
-      }
-    }
   }
 
   render() {
