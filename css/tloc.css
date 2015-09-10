@@ -1,0 +1,179 @@
+@-moz-keyframes link {
+  from {
+    left: 100%;
+  }
+  to {
+    left: 50%;
+  }
+}
+@-webkit-keyframes link {
+  from {
+    left: 100%;
+  }
+  to {
+    left: 50%;
+  }
+}
+@-o-keyframes link {
+  from {
+    left: 100%;
+  }
+  to {
+    left: 50%;
+  }
+}
+@keyframes link {
+  from {
+    left: 100%;
+  }
+  to {
+    left: 50%;
+  }
+}
+@-moz-keyframes headernav {
+  from {
+    -webkit-transform: scale(0);
+  }
+  to {
+    -webkit-transform: scale(1);
+  }
+}
+@-webkit-keyframes headernav {
+  from {
+    -webkit-transform: scale(0);
+  }
+  to {
+    -webkit-transform: scale(1);
+  }
+}
+@-o-keyframes headernav {
+  from {
+    -webkit-transform: scale(0);
+  }
+  to {
+    -webkit-transform: scale(1);
+  }
+}
+@keyframes headernav {
+  from {
+    -webkit-transform: scale(0);
+  }
+  to {
+    -webkit-transform: scale(1);
+  }
+}
+@-moz-keyframes fadein {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fadein {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@-o-keyframes fadein {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes fadein {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@-moz-keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@-o-keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+body {
+  background: #f7f6f5;
+  height: 100%;
+}
+html {
+  height: 100%;
+}
+.mainloc {
+  -webkit-animation: fadein 2s;
+}
+.question {
+  opacity: 0;
+  webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation: fadein ease-in 1s forwards;
+  animation: fadein ease-in 1s forwards;
+  animation-delay: 1s;
+}
+.answer {
+  webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation: fadein ease-in 1s forwards;
+  animation: fadein ease-in 1s forwards;
+  animation-delay: 1s;
+  opacity: 0;
+}
+.todo {
+  transition-property: left;
+  transition-duration: 2s;
+  transition-timing-function: linear;
+  transition-delay: 1s;
+}
+.fe_container {
+  animation: fadein 0.5s;
+  -webkit-animation: fadein 0.5s;
+}
+#map {
+  height: 400px;
+}
+.mapheight,
+.map-gic {
+  height: 100%;
+}
