@@ -2,6 +2,8 @@ import React from 'react';
 import $ from 'jquery';
 import dataModel from '../services/model.js';
 import GoogleMap from '../components/googlemap.jsx';
+import Timer from '../components/timer.jsx';
+
 var ReactComponent = React.Component;
 
 export default class Track extends ReactComponent {
@@ -16,11 +18,14 @@ export default class Track extends ReactComponent {
     if (this.state.tracking) {
       button = <button className="btn btn-block btn-lg btn-primary" onClick={this.handleClick.bind(this)}>Stop tracking</button>;
     }
+
+    var panel = <div className="panel"><div className="panel-body"><div className="list-group-item-text">current: 4,5 km</div><div className="list-group-item-text">tracking time</div> </div></div>;
     return <div className="text-center">
       <div className="page-header">
         <h1>Track your route</h1>
         <GoogleMap marker={{latlng: dataModel.latlng, label: "Start"}} route={this.state.route}/>
         {button}
+        {panel}
       </div>
     </div>
   }
