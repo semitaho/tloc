@@ -5,8 +5,10 @@ import Location from './components/location.jsx';
 import Weather from './components/weather.jsx';
 import Home from './partials/home.jsx';
 import Eat from './partials/eat.jsx';
+import Track from './partials/track.jsx';
 import Router from 'react-router';
 import datamodel from './services/model.js';
+
 var Route = Router.Route,
   DefaultRoute = Router.DefaultRoute,
   RouteHandler = Router.RouteHandler;
@@ -34,6 +36,8 @@ class App extends React.Component {
 var routes = (
   <Route handler={App} path="/">
     <Route name="eat" handler={Eat}/>
+    <Route name="track" handler={Track}/>
+
     <DefaultRoute handler={Home}/>
   </Route>
 );

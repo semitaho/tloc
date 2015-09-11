@@ -1,6 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 import dataModel from '../services/model.js';
+import GoogleMap from '../components/googlemap.jsx';
 var ReactComponent = React.Component;
 
 export default class Eat extends ReactComponent {
@@ -9,15 +10,15 @@ export default class Eat extends ReactComponent {
   constructor() {
     super();
     this.createMarker = this.createMarker.bind(this);
-    this.state = {restaurants: []};
+    this.state = {label: 'You', latlng: dataModel.latlng, icon: null, restaurants: []};
+    this.onReady = this.onReady.bind(this);
   }
 
   handleClick(event) {
-    if (this.currentMarker) {
-      this.currentMarker.setMap(null);
-    }
-    this.currentMarker = this.createMarker(event.location, event.name, event.icon);
+    this.setState({latlng: event.location, icon: event.icon, label: event.name});
   }
+
+
 
   render() {
     var restaurants = '';
@@ -28,34 +29,34 @@ export default class Eat extends ReactComponent {
           <h5>{restaurant.vicinity}</h5>
 
           <p className="list-group-item-text">Distance: {restaurant.distance.text}</p>
+
           <p className="list-group-item-text">Duration: {restaurant.duration.text}</p>
 
         </a>)
-          }.bind(this))}</div>
+      }.bind(this))}</div>
 
     }
 
-    return <div><h1 className="text-center answer">Go to eat</h1>
 
-      <div id="map"></div>
+    return <div> <div className="page-header"><h1 className="text-center answer">Go to for a eat</h1></div>
+      <GoogleMap marker={{latlng:this.state.latlng, icon: this.state.icon, label: this.state.label}}
+                 onready={this.onReady}/>
       {restaurants}
     </div>
   }
 
   componentDidMount() {
-    this.origin = new google.maps.LatLng(dataModel.latlng.lat, dataModel.latlng.lng);
-    console.log('on goog', dataModel.latlng);
-    this.map = new google.maps.Map(document.getElementById('map'), {
-      center: dataModel.latlng,
-      zoom: 14,
-      linksControl: false,
-      scrollwheel: false,
-      zoomControl: false
-    });
 
-    this.createMarker(dataModel.latlng, 'you');
-    this.initRestaurants(dataModel.latlng);
 
+    //  this.createMarker(dataModel.latlng, 'You');
+    this.initRestaurants(this.state.latlng);
+
+
+  }
+
+  onReady(map) {
+    console.log('map loaded');
+    this.map = map;
 
   }
 
@@ -63,7 +64,11 @@ export default class Eat extends ReactComponent {
     var infowindow = new google.maps.InfoWindow({
       content: '<h1>' + label + '</h1>'
     });
-    var marker = new google.maps.Marker({position: latlng, map: this.map, title: 'jaa'});
+    var marker = new MarkerWithLabel({
+      position: latlng, map: this.map,
+      labelAnchor: new google.maps.Point(15, 0),
+      labelContent: '<b>' + label + '</b>'
+    });
     if (color !== undefined) {
       marker.setIcon(color);
 
@@ -83,8 +88,6 @@ export default class Eat extends ReactComponent {
   }
 
   restaurantsFound(results) {
-    console.log('restaurants', results);
-
     var restaurantsNearby = results.map(function (result) {
       return {
         name: result.name,
@@ -95,8 +98,7 @@ export default class Eat extends ReactComponent {
     });
 
     var destinations = [];
-    restaurantsNearby.forEach(function (restaurant) {
-
+    restaurantsNearby.forEach((restaurant) => {
       destinations.push(new google.maps.LatLng(restaurant.location.lat, restaurant.location.lng));
     });
 
@@ -106,7 +108,7 @@ export default class Eat extends ReactComponent {
   fillDistances(restaurantsNearby, destinations) {
     var service = new google.maps.DistanceMatrixService();
     service.getDistanceMatrix({
-      origins: [this.origin],
+      origins: [this.state.latlng],
       destinations: destinations,
       travelMode: google.maps.TravelMode.WALKING
     }, function (data) {
