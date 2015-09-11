@@ -38,6 +38,9 @@ export default class GoogleMap extends React.Component {
     var latlng = this.props.marker.latlng;
     this.map = new google.maps.Map(document.getElementById('map'), {
       center: latlng,
+
+      draggable: false,
+      disableDefaultUI: true,
       zoom: 14,
       linksControl: false,
       scrollwheel: false,

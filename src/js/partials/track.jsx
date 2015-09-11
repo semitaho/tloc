@@ -12,9 +12,9 @@ export default class Track extends ReactComponent {
   }
 
   render() {
-    var button = <button className="btn" onClick={this.handleClick.bind(this)}>Start tracking</button>;
+    var button = <button className="btn btn-block btn-lg btn-primary" onClick={this.handleClick.bind(this)}>Start tracking</button>;
     if (this.state.tracking) {
-      button = <button className="btn" onClick={this.handleClick.bind(this)}>Stop tracking</button>;
+      button = <button className="btn btn-block btn-lg btn-primary" onClick={this.handleClick.bind(this)}>Stop tracking</button>;
     }
     return <div className="text-center">
       <div className="page-header">
@@ -28,10 +28,10 @@ export default class Track extends ReactComponent {
   handleClick(event) {
     if (this.state.tracking) {
       this.setState({tracking: false});
+      navigator.geolocation.clearWatch(this.watcher);
     } else {
       this.setState({tracking: true});
-      console.log('geo opts', this.props.geoOptions);
-      navigator.geolocation.watchPosition(this.onNewPosition.bind(this),undefined, this.props.geOptions);
+      this.watcher = navigator.geolocation.watchPosition(this.onNewPosition.bind(this),undefined, this.props.geOptions);
 
     }
   }

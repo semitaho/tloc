@@ -25,7 +25,6 @@ export default class Tracker extends React.Component {
 
   }
 
-
   getApiLocation(results) {
 
 
