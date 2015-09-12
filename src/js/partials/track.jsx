@@ -22,7 +22,7 @@ export default class Track extends ReactComponent {
         tracking</button>;
       panel = <div className="panel">
         <div className="panel-body">
-          <div className="list-group-item-text">current: {this.state.distance} km</div>
+          <div className="list-group-item-text">current: {this.state.distance.fixed(2)} km</div>
           <div className="list-group-item-text">tracking time: <Timer /></div>
         </div>
       </div>;
@@ -52,16 +52,21 @@ export default class Track extends ReactComponent {
   }
 
   onNewPosition(pos) {
-    console.log('on new pos', pos);
     var position = {lat: pos.coords.latitude, lng: pos.coords.longitude};
     var currentRoute = this.state.route;
     currentRoute.push(position);
     var distance = this.calculateDistance(currentRoute);
+
     this.setState({distance: distance, route: currentRoute});
 
   }
 
-  calculateDistance(currentRoute) {
+  calculateDistance(route) {
+    var latLngRoute = route.map(latlng => {
+      return new google.maps.LatLng(latlng.lat, latlng.lng);
+    });
+    var length = google.maps.geometry.spherical.computeLength(latLngRoute);
+    return length;
 
   }
 
