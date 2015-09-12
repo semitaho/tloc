@@ -45,7 +45,9 @@
           }
           else {
             console.log('response', response);
-      
+            FB.api('/me', function(response) {
+              console.log('Successful login for: ' + response.name);
+            });
             console.log('not logged in')
             FB.login();
           }
