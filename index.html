@@ -27,12 +27,26 @@
         <div id="mapsinterests"></div>
       </div>
     </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div data-href="http://semitaho.github.io/tloc/" data-width="100%" data-numposts="10" class="fb-comments"></div>
+      </div>
+    </div>
     <script>
       window.fbAsyncInit = function() {
         FB.init({
           appId      : '928749127211404',
           xfbml      : true,
           version    : 'v2.4'});
+        FB.getLoginStatus(function (response) {
+          if (response.status === 'connected') {
+            console.log('Logged in.');
+          }
+          else {
+            console.log('not logged in')
+            FB.login();
+          }
+        });
         };
       
       (function(d, s, id){
