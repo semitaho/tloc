@@ -39,10 +39,13 @@
           xfbml      : true,
           version    : 'v2.4'});
         FB.getLoginStatus(function (response) {
+          console.log('response', response);
           if (response.status === 'connected') {
             console.log('Logged in.');
           }
           else {
+            console.log('response', response);
+      
             console.log('not logged in')
             FB.login();
           }
