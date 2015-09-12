@@ -42,22 +42,9 @@
         FB.init({
           appId      : '928749127211404',
           xfbml      : true,
-          version    : 'v2.4'});
-        FB.getLoginStatus(function (response) {
-          console.log('response', response);
-          if (response.status === 'connected') {
-            console.log('Logged in.');
-          }
-          else {
-            console.log('response', response);
-            FB.api('/me', function(response) {
-              console.log('Successful login for: ' + response.name);
-            });
-            console.log('not logged in')
-            FB.login();
-          }
+          version    : 'v2.4'
         });
-        };
+      };
       
       (function(d, s, id){
         var js, fjs = d.getElementsByTagName(s)[0];
