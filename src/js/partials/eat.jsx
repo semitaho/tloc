@@ -9,22 +9,42 @@ export default class Eat extends ReactComponent {
 
   constructor() {
     super();
-    this.createMarker = this.createMarker.bind(this);
-    this.state = {label: 'You', latlng: dataModel.latlng, icon: null, restaurants: []};
+    this.state = {restaurants: []};
     this.onReady = this.onReady.bind(this);
   }
 
   handleClick(event) {
-    this.setState({latlng: event.location, icon: event.icon, label: event.name});
+
+    var start = new google.maps.LatLng(dataModel.latlng.lat, dataModel.latlng.lng);
+    var end = new google.maps.LatLng(event.location.lat, event.location.lng);
+    var request = {
+      origin: start,
+      destination: end,
+      travelMode: google.maps.TravelMode.WALKING
+    };
+    var directionsService = new google.maps.DirectionsService();
+    directionsService.route(request, function (result, status) {
+      if (status == google.maps.DirectionsStatus.OK) {
+        console.log('result', result);
+        this.setState({latlng: event.location, icon: event.icon, label: event.name, direction: result});
+
+      }
+    }.bind(this));
+
   }
 
+  handleMouseOut(event) {
+    this.setState({latlng: null, icon: null, label: null});
+
+  }
 
 
   render() {
     var restaurants = '';
     if (this.state.restaurants) {
       restaurants = <div className="list-group">{this.state.restaurants.map(function (restaurant) {
-        return (<a className="list-group-item" onMouseOver={this.handleClick.bind(this,restaurant)}>
+        return (<a className="list-group-item" onMouseOver={this.handleClick.bind(this,restaurant)}
+                   onMouseOut={this.handleMouseOut.bind(this)}>
           <h4 className="list-group-item-heading">{restaurant.name}</h4>
           <h5>{restaurant.vicinity}</h5>
 
@@ -38,20 +58,23 @@ export default class Eat extends ReactComponent {
     }
 
 
-    return <div> <div className="page-header"><h1 className="text-center answer">Go to for a eat</h1></div>
+    return <div>
+      <div className="page-header"><h1 className="text-center answer">Go to for a eat</h1></div>
       <GoogleMap marker={{latlng:this.state.latlng, icon: this.state.icon, label: this.state.label}}
-                 onready={this.onReady}/>
+                 onready={this.onReady} centerChanged={this.centerChanged.bind(this)} direction={this.state.direction}/>
       {restaurants}
     </div>
   }
 
   componentDidMount() {
+    this.initRestaurants();
+  }
 
 
-    //  this.createMarker(dataModel.latlng, 'You');
-    this.initRestaurants(this.state.latlng);
-
-
+  centerChanged(event) {
+    var latLng = {lat: event.latLng.G, lng: event.latLng.K};
+    dataModel.latlng = latLng;
+    this.initRestaurants();
   }
 
   onReady(map) {
@@ -60,27 +83,10 @@ export default class Eat extends ReactComponent {
 
   }
 
-  createMarker(latlng, label, color) {
-    var infowindow = new google.maps.InfoWindow({
-      content: '<h1>' + label + '</h1>'
-    });
-    var marker = new MarkerWithLabel({
-      position: latlng, map: this.map,
-      labelAnchor: new google.maps.Point(15, 0),
-      labelContent: '<b>' + label + '</b>'
-    });
-    if (color !== undefined) {
-      marker.setIcon(color);
-
-    }
-    return marker;
-  }
-
-
-  initRestaurants(latlng) {
+  initRestaurants() {
     var service = new google.maps.places.PlacesService(this.map);
     var request = {
-      location: latlng,
+      location: dataModel.latlng,
       radius: '1500',
       types: ['food']
     };
@@ -108,7 +114,7 @@ export default class Eat extends ReactComponent {
   fillDistances(restaurantsNearby, destinations) {
     var service = new google.maps.DistanceMatrixService();
     service.getDistanceMatrix({
-      origins: [this.state.latlng],
+      origins: [dataModel.latlng],
       destinations: destinations,
       travelMode: google.maps.TravelMode.WALKING
     }, function (data) {
@@ -124,7 +130,6 @@ export default class Eat extends ReactComponent {
 
     });
 
-    console.log('distances', restaurantsNearby);
     restaurantsNearby.sort((a, b) => {
       return a.distance.value - b.distance.value;
     });

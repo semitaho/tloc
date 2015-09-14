@@ -10,7 +10,7 @@ export default class Track extends ReactComponent {
 
   constructor() {
     super();
-    this.state = {tracking: false, route: [], distance: 0.0};
+    this.state = {tracking: false, route: [], distance: 0.0, accuracy: 0};
   }
 
   render() {
@@ -22,7 +22,9 @@ export default class Track extends ReactComponent {
         tracking</button>;
       panel = <div className="panel">
         <div className="panel-body">
-          <div className="list-group-item-text">current: {this.state.distance.fixed(2)} km</div>
+          <div className="list-group-item-text">current: {(this.state.distance / 1000).toFixed(2)} km</div>
+          <div className="list-group-item-text">accuracy: {this.state.accuracy}</div>
+
           <div className="list-group-item-text">tracking time: <Timer /></div>
         </div>
       </div>;
@@ -53,11 +55,15 @@ export default class Track extends ReactComponent {
 
   onNewPosition(pos) {
     var position = {lat: pos.coords.latitude, lng: pos.coords.longitude};
+    console.log('accuracy', pos.coords.accuracy);
+    if (pos.coords.accuracy < this.props.accuracyLimit) {
+      return;
+    }
     var currentRoute = this.state.route;
     currentRoute.push(position);
     var distance = this.calculateDistance(currentRoute);
 
-    this.setState({distance: distance, route: currentRoute});
+    this.setState({distance: distance, route: currentRoute, accuracy: pos.coords.accuracy});
 
   }
 
@@ -72,4 +78,4 @@ export default class Track extends ReactComponent {
 
 }
 
-Track.defaultProps = {geoOptions: {enableHighAccuracy: true}};
+Track.defaultProps = {geoOptions: {enableHighAccuracy: true}, accuracyLimit: 20};

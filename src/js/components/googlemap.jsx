@@ -1,10 +1,12 @@
 import React from 'react';
 import $ from 'jquery';
+import dataModel from '../services/model.js'
 
 export default class GoogleMap extends React.Component {
   constructor() {
     super();
     this.state = {marker: {}};
+    this.directionsRenderer = new google.maps.DirectionsRenderer();
 
   }
 
@@ -14,16 +16,6 @@ export default class GoogleMap extends React.Component {
     return <div id="map"></div>
   }
 
-
-  componentWillReceiveProps(nextProps) {
-    this.clearMarker();
-    this.createMarker(nextProps.marker.latlng, nextProps.marker.label, nextProps.marker.icon);
-
-    if (nextProps.route && nextProps.route.length > 0) {
-      this.drawRoute(nextProps.route);
-    }
-
-  }
 
   drawRoute(route) {
     var line = new google.maps.Polyline({path: route, strokeColor: '#FF0000'});
@@ -35,10 +27,9 @@ export default class GoogleMap extends React.Component {
   }
 
   componentDidMount() {
-    var latlng = this.props.marker.latlng;
+    console.log('did mount');
     this.map = new google.maps.Map(document.getElementById('map'), {
-      center: latlng,
-
+      center: dataModel.latlng,
       draggable: false,
       disableDefaultUI: true,
       zoom: 14,
@@ -51,10 +42,27 @@ export default class GoogleMap extends React.Component {
       this.props.onready(this.map);
     }
 
-    this.createMarker(latlng, this.props.marker.label, this.props.marker.icon);
+    this.createCurrentMarker(dataModel.latlng, this.props.marker.label, this.props.marker.icon);
+    this.directionsRenderer.setMap(this.map);
 
   }
 
+  componentWillReceiveProps(nextProps, nextState) {
+    console.log('will receive props');
+    this.clearMarker();
+
+    if (nextProps.marker && nextProps.marker.latlng) {
+      this.origin = this.createMarker(nextProps.marker.latlng, nextProps.marker.label, nextProps.marker.icon);
+    }
+    console.log('directions', nextProps.direction);
+    if (nextProps.direction && nextProps.direction !== undefined) {
+      console.log('got directions...');
+      this.directionsRenderer.setDirections(nextProps.direction);
+
+    } else {
+   //   this.directionsRenderer.setDirections(null);
+    }
+  }
 
 
   clearMarker() {
@@ -64,22 +72,39 @@ export default class GoogleMap extends React.Component {
   }
 
   createMarker(latlng, label, color) {
-    if (this.origin) {
-
-    }
     var infowindow = new google.maps.InfoWindow({
       content: '<h1>' + label + '</h1>'
     });
     var marker = new MarkerWithLabel({
       position: latlng, map: this.map,
+      draggable: false,
       labelAnchor: new google.maps.Point(15, 0),
       labelContent: '<b>' + label + '</b>'
     });
     if (color !== undefined) {
       marker.setIcon(color);
-
     }
-    this.origin = marker;
+    return marker;
+  }
+
+  createCurrentMarker(latlng) {
+    var marker = new MarkerWithLabel({
+      position: latlng, map: this.map,
+      draggable: true,
+      labelAnchor: new google.maps.Point(15, 0),
+      labelContent: '<b>You</b>'
+    });
+    marker.addListener('mouseup', function (event) {
+      console.log('on mouse up', event);
+      this.map.setCenter(event.latLng);
+      if (this.props.centerChanged) {
+        this.props.centerChanged(event);
+      }
+
+
+    }.bind(this));
+
+
   }
 
 
