@@ -47,33 +47,35 @@ var routes = (
 var checkLogin = function () {
   if (window.location.hostname === 'localhost') {
     console.log('in localhost');
-    initApp();
 
   }
   else {
+    /*
+     FB.getLoginStatus(function (response) {
+     console.log('response', response);
+     if (response.status === 'connected') {
+     console.log('Logged in.');
+     console.log('response', response);
+     FB.api('/me', function (response) {
+     console.log('Successful login for: ' + response.name);
+     datamodel.me = response;
+     console.log('me', response);
+     });
+     initApp();
+     }
+     else {
 
-    FB.getLoginStatus(function (response) {
-      console.log('response', response);
-      if (response.status === 'connected') {
-        console.log('Logged in.');
-        console.log('response', response);
-        FB.api('/me', function (response) {
-          console.log('Successful login for: ' + response.name);
-          datamodel.me = response;
-          console.log('me', response);
-        });
-        initApp();
-      }
-      else {
-
-        FB.login(function (response) {
-          if (response.status === 'connected') {
-            initApp();
-          }
-        });
-      }
-    });
+     FB.login(function (response) {
+     if (response.status === 'connected') {
+     initApp();
+     }
+     });
+     }
+     });
+     */
   }
+  initApp();
+
 };
 
 var initApp = function () {

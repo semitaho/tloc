@@ -26,7 +26,7 @@ export default class Eat extends ReactComponent {
     directionsService.route(request, function (result, status) {
       if (status == google.maps.DirectionsStatus.OK) {
         console.log('result', result);
-        this.setState({latlng: event.location, icon: event.icon, label: event.name, direction: result});
+        this.setState({direction: result});
 
       }
     }.bind(this));
