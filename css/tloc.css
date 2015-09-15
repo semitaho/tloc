@@ -170,7 +170,11 @@ html {
   -webkit-animation: fadein 0.5s;
 }
 #map {
-  height: 400px;
+  height: 600px;
+}
+.desc {
+  overflow-y: scroll;
+  max-height: 600px;
 }
 .mapheight,
 .map-gic {
