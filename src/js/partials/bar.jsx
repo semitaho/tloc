@@ -8,8 +8,8 @@ export default class Eat extends ReactComponent {
 
   render() {
     return <div>
-      <h1 className="text-center answer page-header">Go to eat</h1>
-      <Places type="food"/>
+      <h1 className="text-center answer page-header">Go to have a drink somewhere</h1>
+      <Places type="bar"/>
     </div>
   }
 

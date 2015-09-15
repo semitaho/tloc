@@ -7,6 +7,7 @@ export default class GoogleMap extends React.Component {
     super();
     this.state = {marker: {}};
     this.directionsRenderer = new google.maps.DirectionsRenderer();
+    this.directionsRenderer.setOptions({draggable: false, suppressMarkers: false});
 
   }
 
@@ -60,7 +61,7 @@ export default class GoogleMap extends React.Component {
       this.directionsRenderer.setDirections(nextProps.direction);
 
     } else {
-   //   this.directionsRenderer.setDirections(null);
+      //   this.directionsRenderer.setDirections(null);
     }
   }
 

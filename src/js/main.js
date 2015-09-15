@@ -5,6 +5,8 @@ import Location from './components/location.jsx';
 import Weather from './components/weather.jsx';
 import Home from './partials/home.jsx';
 import Eat from './partials/eat.jsx';
+import Bar from './partials/bar.jsx';
+
 import Track from './partials/track.jsx';
 import Router from 'react-router';
 import datamodel from './services/model.js';
@@ -38,6 +40,8 @@ class App extends React.Component {
 var routes = (
   <Route handler={App} path="/">
     <Route name="eat" handler={Eat}/>
+    <Route name="bar" handler={Bar}/>
+
     <Route name="track" handler={Track}/>
 
     <DefaultRoute handler={Home}/>
@@ -131,6 +135,4 @@ window.fbAsyncInit = function () {
 }(document, 'script', 'facebook-jssdk'));
 
 
-//
-//React.render(React.createElement(map), document.getElementById('mapsinterests'));
 
