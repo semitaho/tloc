@@ -32,9 +32,11 @@ export default class Places extends React.Component {
   }
 
   centerChanged(event) {
-    var latLng = {lat: event.latLng.G, lng: event.latLng.K};
-    dataModel.latlng = latLng;
-    this.initItems();
+    if (event.latLng) {
+      var latLng = {lat: event.latLng.G, lng: event.latLng.K};
+      dataModel.latlng = latLng;
+      this.initItems();
+    }
   }
 
 
@@ -147,7 +149,7 @@ export default class Places extends React.Component {
 
       return a.distance.value - b.distance.value;
     });
-    this.setState({items: itemsNearby});
+    this.setState({items: itemsNearby, direction: null});
   }
 
 }

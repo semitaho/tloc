@@ -5,7 +5,7 @@ import dataModel from '../services/model.js'
 export default class GoogleMap extends React.Component {
   constructor() {
     super();
-    this.state = {marker: {}};
+    this.state = {marker: {}, direction: null};
     this.directionsRenderer = new google.maps.DirectionsRenderer();
     this.directionsRenderer.setOptions({draggable: false, suppressMarkers: false});
 
@@ -58,10 +58,10 @@ export default class GoogleMap extends React.Component {
     console.log('directions', nextProps.direction);
     if (nextProps.direction && nextProps.direction !== undefined) {
       console.log('got directions...');
+      this.directionsRenderer.setMap(this.map);
       this.directionsRenderer.setDirections(nextProps.direction);
-
     } else {
-      //   this.directionsRenderer.setDirections(null);
+      this.directionsRenderer.setMap(null);
     }
   }
 
@@ -92,11 +92,11 @@ export default class GoogleMap extends React.Component {
     var marker = new MarkerWithLabel({
       position: latlng, map: this.map,
       draggable: true,
+      raiseOnDrag: false,
       labelAnchor: new google.maps.Point(15, 0),
       labelContent: '<b>You</b>'
     });
     marker.addListener('mouseup', function (event) {
-      console.log('on mouse up', event);
       this.map.setCenter(event.latLng);
       if (this.props.centerChanged) {
         this.props.centerChanged(event);
