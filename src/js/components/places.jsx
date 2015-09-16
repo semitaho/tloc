@@ -55,17 +55,21 @@ export default class Places extends React.Component {
         if (this.state.active === restaurant) {
           listClass += ' active';
         }
-        return (<a className={listClass} onClick={this.handleClick.bind(this,restaurant)}>
-          <h4 className="list-group-item-heading">{restaurant.name}</h4>
+        var stars = '';
+        if (restaurant.rating) {
+          var pointStr = restaurant.rating.toString() + ' / 5';
+          stars = <small className="pull-right">{pointStr}</small>;
+        }
+        var restaurant = <a className={listClass} onClick={this.handleClick.bind(this,restaurant)}>
+          <h4 className="list-group-item-heading">{restaurant.name} {stars}</h4>
           <h5>{restaurant.vicinity}</h5>
 
           <p className="list-group-item-text">Distance: {restaurant.distance.text}</p>
 
           <p className="list-group-item-text">Duration: {restaurant.duration.text}</p>
           <b className="list-group-item-text">{restaurant.isopen}</b>
-
-
-        </a>)
+          </a>;
+        return restaurant;
       }.bind(this))}</div>
 
     }
@@ -81,7 +85,8 @@ export default class Places extends React.Component {
         <div className="col-md-6 col-sm-12 desc">
           {items}
         </div>
-      </div>)
+      </div>
+    )
 
   }
 
@@ -103,11 +108,14 @@ export default class Places extends React.Component {
       if (result.opening_hours) {
         isOpen = result.opening_hours.open_now ? 'Open' : 'Closed';
       }
+      if (result.photos)
+      console.log(result.photos[0].getUrl({'maxWidth': 100, 'maxHeight': 100}));
       return {
         name: result.name,
         vicinity: result.vicinity,
         isopen: isOpen,
         icon: result.icon,
+        rating: result.rating,
         location: {lat: result.geometry.location.H, lng: result.geometry.location.L}
       };
     });
