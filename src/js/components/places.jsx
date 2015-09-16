@@ -108,12 +108,14 @@ export default class Places extends React.Component {
         vicinity: result.vicinity,
         isopen: isOpen,
         icon: result.icon,
-        location: {lat: result.geometry.location.G, lng: result.geometry.location.K}
+        location: {lat: result.geometry.location.H, lng: result.geometry.location.L}
       };
     });
 
     var destinations = [];
     itemsNearby.forEach((item) => {
+      console.log('destinations', item);
+
       destinations.push(new google.maps.LatLng(item.location.lat, item.location.lng));
     });
 
