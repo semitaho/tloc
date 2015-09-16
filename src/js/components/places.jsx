@@ -33,7 +33,7 @@ export default class Places extends React.Component {
 
   centerChanged(event) {
     if (event.latLng) {
-      var latLng = {lat: event.latLng.G, lng: event.latLng.K};
+      var latLng = {lat: event.latLng.H, lng: event.latLng.L};
       dataModel.latlng = latLng;
       this.initItems();
     }
@@ -114,8 +114,6 @@ export default class Places extends React.Component {
 
     var destinations = [];
     itemsNearby.forEach((item) => {
-      console.log('destinations', item);
-
       destinations.push(new google.maps.LatLng(item.location.lat, item.location.lng));
     });
 
@@ -146,7 +144,15 @@ export default class Places extends React.Component {
         if (a.isopen === 'Open') {
           return -1;
         }
-        return 1;
+        if (b.isopen === 'Open') {
+          return 1;
+        }
+        if (a.isopen === '') {
+          return -1;
+        }
+        if (b.isopen === '') {
+          return 1;
+        }
       }
 
       return a.distance.value - b.distance.value;
