@@ -9,7 +9,7 @@ export default class Home extends ReactComponent {
       <h1 className="text-center question">What do you want to do?</h1>
       <a href="#/eat" className="btn btn-lg btn-info btn-block">Go to eat</a>
       <a href="#/bar" className="btn btn-lg btn-info btn-block">Go to bar</a>
-
+      <a href="#/bicycle" className="btn btn-lg btn-info btn-block">Go to fix the bike</a>
       <a href="#/track" className="btn btn-lg btn-info btn-block">Track your route</a>
 
     </div>

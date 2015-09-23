@@ -1,6 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 import dataModel from '../services/model.js'
+import geoStore from '../services/model.js';
 
 export default class GoogleMap extends React.Component {
   constructor() {
@@ -9,6 +10,22 @@ export default class GoogleMap extends React.Component {
     this.directionsRenderer = new google.maps.DirectionsRenderer();
     this.directionsRenderer.setOptions({draggable: false, suppressMarkers: false});
 
+  }
+
+  centerChanged(event) {
+    if (event.latLng) {
+      var latLng = {lat: event.latLng.H, lng: event.latLng.L};
+      geoService.geocoder(latLng, function (done) {
+        dispatcher.dispatch({
+          actionType: 'location-update',
+          location: done.latlng,
+          apiLocation: done.apiLocation,
+          city: done.location
+        });
+      });
+
+      this.initItems();
+    }
   }
 
 
@@ -27,10 +44,26 @@ export default class GoogleMap extends React.Component {
     this.createMarker(lastLoc, 'Current');
   }
 
+  onLocationChange(){
+
+  }
+
   componentDidMount() {
+
+    geoStore.addListener('location-update', this.onLocationChange.bind(this));
+
+
+
+
+
+
+
+
+
     console.log('did mount');
+    console.log('latlng: '+this.state.latlng);
     this.map = new google.maps.Map(document.getElementById('map'), {
-      center: dataModel.latlng,
+      center: geoStore.getLocation(),
       draggable: false,
       disableDefaultUI: true,
       zoom: 14,
@@ -43,7 +76,7 @@ export default class GoogleMap extends React.Component {
       this.props.onready(this.map);
     }
 
-    this.createCurrentMarker(dataModel.latlng, this.props.marker.label, this.props.marker.icon);
+    this.createCurrentMarker(geoStore.getLocation());
     this.directionsRenderer.setMap(this.map);
 
   }
@@ -98,9 +131,7 @@ export default class GoogleMap extends React.Component {
     });
     marker.addListener('mouseup', function (event) {
       this.map.setCenter(event.latLng);
-      if (this.props.centerChanged) {
-        this.props.centerChanged(event);
-      }
+      this.centerChanged(event);
 
 
     }.bind(this));

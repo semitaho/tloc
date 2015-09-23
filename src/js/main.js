@@ -6,11 +6,14 @@ import Weather from './components/weather.jsx';
 import Home from './partials/home.jsx';
 import Eat from './partials/eat.jsx';
 import Bar from './partials/bar.jsx';
+import Bicycle from './partials/bicycle.jsx';
 
 import Track from './partials/track.jsx';
 import Router from 'react-router';
 import datamodel from './services/model.js';
 import FacebookLogin from './components/facebookLogin.jsx';
+import dispatcher from './services/tlocDispatcher.js';
+import geoService from './services/geoservice.js';
 
 
 var Route = Router.Route,
@@ -41,9 +44,9 @@ var routes = (
   <Route handler={App} path="/">
     <Route name="eat" handler={Eat}/>
     <Route name="bar" handler={Bar}/>
+    <Route name="bicycle" handler={Bicycle}/>
 
     <Route name="track" handler={Track}/>
-
     <DefaultRoute handler={Home}/>
   </Route>
 );
@@ -89,27 +92,26 @@ var initApp = function () {
       lat: location.coords.latitude,
       lng: location.coords.longitude
     };
-    geocoder.geocode(
-      {'location': latlng}, ((result, status) => {
-        if (status == google.maps.GeocoderStatus.OK) {
-          if (result[0]) {
-            var location = result[0].formatted_address;
-            var apiLocation = getApiLocation(result);
-            React.render(React.createElement(Location, {data: location}), document.getElementById('location'));
-            React.render(React.createElement(Weather, {
-              data: {
-                latlng: latlng,
-                location: location
-              }
-            }), document.getElementById('weather'));
-            Router.run(routes, function (Handler) {
-              React.render(<Handler/>, document.getElementById('routing'));
-            });
-          }
-        }
-      }));
-    datamodel.latlng = latlng;
+    React.render(React.createElement(Weather), document.getElementById('weather'));
+    React.render(React.createElement(Location), document.getElementById('location'));
 
+    console.log('lat', latlng);
+
+    geoService.geocode(latlng, function (done) {
+      dispatcher.dispatch({
+        actionType: 'location-update',
+        location: done.latlng,
+        apiLocation: done.apiLocation,
+        city: done.location
+      });
+
+
+    });
+
+
+    Router.run(routes, function (Handler) {
+      React.render(<Handler/>, document.getElementById('routing'));
+    });
   }, undefined, {enableHighAccuracy: true});
 };
 

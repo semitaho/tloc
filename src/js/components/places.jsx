@@ -1,21 +1,32 @@
 import React from 'react';
 import GoogleMap from '../components/googlemap.jsx';
 import dataModel from '../services/model.js';
-
+import dispatcher from '../services/tlocDispatcher.js';
+import geoService from '../services/geoservice.js';
+import ApiLoader from '../components/apiloader.jsx';
 export default class Places extends React.Component {
   constructor() {
     super();
-    this.state = {items: [], active: null};
+    this.state = {items: [], active: null, latlng: dataModel.getLocation()};
     this.onReady = this.onReady.bind(this);
+    this.onLocationChange = this.onLocationChange.bind(this);
   }
 
   componentDidMount() {
-    this.initItems();
+    dataModel.addListener('location-update', this.onLocationChange.bind(this));
+  }
+
+  onLocationChange() {
+    console.log('places - change', dataModel.getLocation());
+    this.setState({latlng: dataModel.getLocation()});
+   // this.initItems();
+
   }
 
   handleClick(event) {
+    var latlng = dataModel.getLocation();
 
-    var start = new google.maps.LatLng(dataModel.latlng.lat, dataModel.latlng.lng);
+    var start = new google.maps.LatLng(latlng.lat, latlng.lng);
     var end = new google.maps.LatLng(event.location.lat, event.location.lng);
     var request = {
       origin: start,
@@ -31,13 +42,7 @@ export default class Places extends React.Component {
 
   }
 
-  centerChanged(event) {
-    if (event.latLng) {
-      var latLng = {lat: event.latLng.H, lng: event.latLng.L};
-      dataModel.latlng = latLng;
-      this.initItems();
-    }
-  }
+
 
 
   onReady(map) {
@@ -68,40 +73,49 @@ export default class Places extends React.Component {
 
           <p className="list-group-item-text">Duration: {restaurant.duration.text}</p>
           <b className="list-group-item-text">{restaurant.isopen}</b>
-          </a>;
+        </a>;
         return restaurant;
       }.bind(this))}</div>
 
     }
+    if (this.state.latlng !== undefined && this.state.latlng !== null) {
+      console.log('lattari lng', this.state.latlng);
 
-
-    return (
-      <div className="row">
-        <div className="col-md-6 col-sm-12">
-          <GoogleMap marker={{latlng:this.state.latlng, icon: this.state.icon, label: this.state.label}}
-                     onready={this.onReady} centerChanged={this.centerChanged.bind(this)}
-                     direction={this.state.direction}/>
+      return (
+        <div className="row">
+          <div className="col-md-6 col-sm-12">
+            <GoogleMap
+                       onready={this.onReady}
+                       direction={this.state.direction}/>
+          </div>
+          <div className="col-md-6 col-sm-12 desc">
+            {items}
+          </div>
         </div>
-        <div className="col-md-6 col-sm-12 desc">
-          {items}
-        </div>
-      </div>
-    )
 
+      )
+    } else {
+      return <ApiLoader name="Google maps" />
+    }
   }
 
 
   initItems() {
+    var latlng = dataModel.getLocation();
+    if (latlng === undefined || latlng === null) {
+      return;
+    }
+    console.log('initing items', this.map);
     var service = new google.maps.places.PlacesService(this.map);
     var request = {
-      location: dataModel.latlng,
+      location: latlng,
       radius: '1500',
       types: [this.props.type]
     };
-    service.nearbySearch(request, this.itemsFound.bind(this));
+    service.nearbySearch(request, this.itemsFound.bind(this, latlng));
   }
 
-  itemsFound(results) {
+  itemsFound(latlng, results) {
     console.log('items', results);
     var itemsNearby = results.map(function (result) {
       var isOpen = '';
@@ -109,7 +123,7 @@ export default class Places extends React.Component {
         isOpen = result.opening_hours.open_now ? 'Open' : 'Closed';
       }
       if (result.photos)
-      console.log(result.photos[0].getUrl({'maxWidth': 100, 'maxHeight': 100}));
+        console.log(result.photos[0].getUrl({'maxWidth': 100, 'maxHeight': 100}));
       return {
         name: result.name,
         vicinity: result.vicinity,
@@ -125,21 +139,21 @@ export default class Places extends React.Component {
       destinations.push(new google.maps.LatLng(item.location.lat, item.location.lng));
     });
 
-    this.fillDistances(itemsNearby, destinations);
+    this.fillDistances(itemsNearby, destinations, latlng);
   }
 
-  fillDistances(itemsNearby, destinations) {
+  fillDistances(itemsNearby, destinations, latlng) {
     var service = new google.maps.DistanceMatrixService();
     service.getDistanceMatrix({
-      origins: [dataModel.latlng],
+      origins: [latlng],
       destinations: destinations,
       travelMode: google.maps.TravelMode.WALKING
     }, function (data) {
-      this.onDistance(data, itemsNearby);
+      this.onDistance(data, itemsNearby, latlng);
     }.bind(this));
   }
 
-  onDistance(data, itemsNearby) {
+  onDistance(data, itemsNearby, latlng) {
     itemsNearby.forEach((restaurant, index) => {
       var element = data.rows[0].elements[index];
       restaurant.distance = element.distance;
@@ -165,7 +179,7 @@ export default class Places extends React.Component {
 
       return a.distance.value - b.distance.value;
     });
-    this.setState({items: itemsNearby, direction: null});
+    this.setState({items: itemsNearby, direction: null, latlng: latlng});
   }
 
 }
