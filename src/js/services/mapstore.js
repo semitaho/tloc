@@ -2,6 +2,7 @@ var dispatcher = require('./tlocDispatcher.js');
 import $ from 'jquery';
 import BaseStore from './basemodel.js';
 import geoStore from './model.js';
+import geoService from '../services/geoservice.js';
 
 class MapStore extends BaseStore {
 
@@ -30,6 +31,8 @@ class MapStore extends BaseStore {
 
 
   }
+
+
 
   getMap() {
     return this.map;

@@ -4,6 +4,8 @@ import dataModel from '../services/model.js'
 import geoStore from '../services/model.js';
 import dispatcher from '../services/tlocDispatcher.js';
 import mapStore from '../services/mapstore.js';
+import geoService from '../services/geoservice.js';
+
 export default class GoogleMap extends React.Component {
   constructor() {
     super();
@@ -17,7 +19,7 @@ export default class GoogleMap extends React.Component {
   centerChanged(event) {
     if (event.latLng) {
       var latLng = {lat: event.latLng.H, lng: event.latLng.L};
-      geoService.geocoder(latLng, function (done) {
+      geoService.geocode(latLng, function (done) {
         dispatcher.dispatch({
           actionType: 'location-update',
           location: done.latlng,
@@ -45,20 +47,22 @@ export default class GoogleMap extends React.Component {
     this.createMarker(lastLoc, 'Current');
   }
 
-  onLocationChange() {
-    console.log('changed loc', mapStore.getMap());
+  onMapCreated() {
+    console.log('cukkoa');
+    this.createCurrentMarker();
+
 
   }
 
   componentDidMount() {
+    mapStore.addListener('map-created', this.onMapCreated.bind(this));
+
     dispatcher.dispatch({
       actionType: 'map-create'
     });
-    geoStore.addListener('location-update', this.onLocationChange.bind(this));
     console.log('did mount');
     console.log('latlng: ' + this.state.latlng);
 
-    this.createCurrentMarker(geoStore.getLocation());
     this.directionsRenderer.setMap(this.map);
 
   }
@@ -103,20 +107,21 @@ export default class GoogleMap extends React.Component {
     return marker;
   }
 
-  createCurrentMarker(latlng) {
+  createCurrentMarker() {
     var marker = new MarkerWithLabel({
-      position: latlng, map: this.map,
+      position: dataModel.getLocation(), map: mapStore.getMap(),
       draggable: true,
       raiseOnDrag: false,
       labelAnchor: new google.maps.Point(15, 0),
       labelContent: '<b>You</b>'
     });
-    marker.addListener('mouseup', function (event) {
-      this.map.setCenter(event.latLng);
-      this.centerChanged(event);
+
+     marker.addListener('mouseup', function (event) {
+     mapStore.getMap().setCenter(event.latLng);
+     this.centerChanged(event);
 
 
-    }.bind(this));
+     }.bind(this));
 
 
   }

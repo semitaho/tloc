@@ -16,7 +16,7 @@ export default class BaseStore {
     if (!this.listeners[EVENT]) {
       throw 'Event not registered: ' + EVENT;
     }
-    console.log('event', EVENT);
+    console.log('event', this.listeners[EVENT]);
 
     this.listeners[EVENT].forEach(cb => cb.apply());
 
