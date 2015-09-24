@@ -2,13 +2,15 @@ import React from 'react';
 import $ from 'jquery';
 import dataModel from '../services/model.js'
 import geoStore from '../services/model.js';
-
+import dispatcher from '../services/tlocDispatcher.js';
+import mapStore from '../services/mapstore.js';
 export default class GoogleMap extends React.Component {
   constructor() {
     super();
     this.state = {marker: {}, direction: null};
     this.directionsRenderer = new google.maps.DirectionsRenderer();
     this.directionsRenderer.setOptions({draggable: false, suppressMarkers: false});
+
 
   }
 
@@ -24,7 +26,6 @@ export default class GoogleMap extends React.Component {
         });
       });
 
-      this.initItems();
     }
   }
 
@@ -44,37 +45,18 @@ export default class GoogleMap extends React.Component {
     this.createMarker(lastLoc, 'Current');
   }
 
-  onLocationChange(){
+  onLocationChange() {
+    console.log('changed loc', mapStore.getMap());
 
   }
 
   componentDidMount() {
-
-    geoStore.addListener('location-update', this.onLocationChange.bind(this));
-
-
-
-
-
-
-
-
-
-    console.log('did mount');
-    console.log('latlng: '+this.state.latlng);
-    this.map = new google.maps.Map(document.getElementById('map'), {
-      center: geoStore.getLocation(),
-      draggable: false,
-      disableDefaultUI: true,
-      zoom: 14,
-      linksControl: false,
-      scrollwheel: false,
-      zoomControl: false
+    dispatcher.dispatch({
+      actionType: 'map-create'
     });
-
-    if (this.props.onready) {
-      this.props.onready(this.map);
-    }
+    geoStore.addListener('location-update', this.onLocationChange.bind(this));
+    console.log('did mount');
+    console.log('latlng: ' + this.state.latlng);
 
     this.createCurrentMarker(geoStore.getLocation());
     this.directionsRenderer.setMap(this.map);

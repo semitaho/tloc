@@ -1,8 +1,8 @@
 var React = require('react');
-var map = require('./components/googlemap.jsx');
 //require('bootstrap');
 import Location from './components/location.jsx';
 import Weather from './components/weather.jsx';
+
 import Home from './partials/home.jsx';
 import Eat from './partials/eat.jsx';
 import Bar from './partials/bar.jsx';
@@ -104,14 +104,14 @@ var initApp = function () {
         apiLocation: done.apiLocation,
         city: done.location
       });
+      Router.run(routes, function (Handler) {
+        React.render(<Handler/>, document.getElementById('routing'));
+      });
 
 
     });
 
 
-    Router.run(routes, function (Handler) {
-      React.render(<Handler/>, document.getElementById('routing'));
-    });
   }, undefined, {enableHighAccuracy: true});
 };
 

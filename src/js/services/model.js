@@ -10,13 +10,13 @@ class DataModel extends BaseStore {
     super();
 
     var self = this;
-    dispatcher.register(payload => {
+    self.dispatchToken = dispatcher.register(payload => {
       if (payload.actionType === 'location-update') {
         console.log('location changed...');
         self.location = payload.location;
         self.apiLocation = payload.apiLocation;
         self.city = payload.city;
-        this.emitChange('location-update');
+        self.emitChange('location-update');
       }
 
     });
@@ -28,6 +28,10 @@ class DataModel extends BaseStore {
 
   getCity() {
     return this.city;
+  }
+
+  getToken(){
+    return this.dispatchToken;
   }
 
   getApiLocation() {
