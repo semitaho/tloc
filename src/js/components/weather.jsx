@@ -23,7 +23,7 @@ export default class Weather extends React.Component {
   }
 
   componentDidMount() {
-    geoStore.addListener('location-update', this.onLocationChange.bind(this));
+    geoStore.addListener('location-updated', this.onLocationChange.bind(this));
 
   }
 

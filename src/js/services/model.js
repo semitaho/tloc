@@ -16,7 +16,7 @@ class DataModel extends BaseStore {
         self.location = payload.location;
         self.apiLocation = payload.apiLocation;
         self.city = payload.city;
-        self.emitChange('location-update');
+        self.emitChange('location-updated');
       }
 
     });

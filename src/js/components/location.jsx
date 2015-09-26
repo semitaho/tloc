@@ -26,7 +26,7 @@ export default class Location extends ReactComponent {
   }
 
   componentDidMount() {
-    geoStore.addListener('location-update', this.onApiLocation.bind(this));
+    geoStore.addListener('location-updated', this.onApiLocation.bind(this));
 
   }
 

@@ -10,6 +10,7 @@ export default class Places extends React.Component {
     super();
     this.state = {items: [], active: null};
     mapStore.addListener('map-created', this.mapCreated.bind(this));
+    dataModel.addListener('location-updated', this.locationUpdated.bind(this));
 
   }
 
@@ -19,6 +20,11 @@ export default class Places extends React.Component {
 
   mapCreated() {
     console.log('map has been created');
+    this.initItems();
+  }
+
+  locationUpdated(){
+    console.log('places - location updated');
     this.initItems();
   }
 
@@ -32,10 +38,14 @@ export default class Places extends React.Component {
       destination: end,
       travelMode: google.maps.TravelMode.WALKING
     };
+    console.log('joujou');
     var directionsService = new google.maps.DirectionsService();
     directionsService.route(request, function (result, status) {
       if (status == google.maps.DirectionsStatus.OK) {
-        this.setState({direction: result, active: event});
+        dispatcher.dispatch({
+          actionType: 'direction-update',
+          direction: result
+        });
       }
     }.bind(this));
 
@@ -87,7 +97,6 @@ export default class Places extends React.Component {
   }
 
   itemsFound(results) {
-    console.log('items', results);
     var itemsNearby = results.map(function (result) {
       var isOpen = '';
       if (result.opening_hours) {

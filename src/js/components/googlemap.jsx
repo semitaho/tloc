@@ -38,15 +38,6 @@ export default class GoogleMap extends React.Component {
   }
 
 
-  drawRoute(route) {
-    var line = new google.maps.Polyline({path: route, strokeColor: '#FF0000'});
-    line.setMap(this.map);
-    var lastLoc = route[route.length - 1];
-    this.map.setCenter(lastLoc);
-    this.clearMarker();
-    this.createMarker(lastLoc, 'Current');
-  }
-
   onMapCreated() {
     console.log('cukkoa');
     this.createCurrentMarker();
@@ -55,33 +46,40 @@ export default class GoogleMap extends React.Component {
   }
 
   componentDidMount() {
-    mapStore.addListener('map-created', this.onMapCreated.bind(this));
-
+    this.registerCallbacks();
     dispatcher.dispatch({
       actionType: 'map-create'
     });
     console.log('did mount');
     console.log('latlng: ' + this.state.latlng);
+  }
 
-    this.directionsRenderer.setMap(this.map);
+  registerCallbacks() {
+    mapStore.addListener('map-created', this.onMapCreated.bind(this));
+    mapStore.addListener('direction-updated', this.onDirectionUpdated.bind(this));
+    dataModel.addListener('location-updated', this.onLocationUpdated.bind(this));
 
   }
 
-  componentWillReceiveProps(nextProps, nextState) {
-    console.log('will receive props');
-    this.clearMarker();
-
-    if (nextProps.marker && nextProps.marker.latlng) {
-      this.origin = this.createMarker(nextProps.marker.latlng, nextProps.marker.label, nextProps.marker.icon);
-    }
-    console.log('directions', nextProps.direction);
-    if (nextProps.direction && nextProps.direction !== undefined) {
-      console.log('got directions...');
-      this.directionsRenderer.setMap(this.map);
-      this.directionsRenderer.setDirections(nextProps.direction);
+  onDirectionUpdated() {
+    console.log('direction is updated...');
+    var direction = mapStore.getDirection();
+    if (direction !== undefined && direction !== null) {
+      console.log('map', mapStore.getMap());
+      this.directionsRenderer.setMap(mapStore.getMap());
+      this.directionsRenderer.setDirections(direction);
     } else {
       this.directionsRenderer.setMap(null);
     }
+  }
+
+  onLocationUpdated() {
+    var direction = mapStore.getDirection();
+    if (direction !== undefined && direction !== null) {
+      this.directionsRenderer.setMap(null);
+
+    }
+
   }
 
 
@@ -116,12 +114,12 @@ export default class GoogleMap extends React.Component {
       labelContent: '<b>You</b>'
     });
 
-     marker.addListener('mouseup', function (event) {
-     mapStore.getMap().setCenter(event.latLng);
-     this.centerChanged(event);
+    marker.addListener('mouseup', function (event) {
+      mapStore.getMap().setCenter(event.latLng);
+      this.centerChanged(event);
 
 
-     }.bind(this));
+    }.bind(this));
 
 
   }
