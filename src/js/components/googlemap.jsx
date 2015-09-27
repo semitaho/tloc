@@ -39,7 +39,6 @@ export default class GoogleMap extends React.Component {
 
 
   onMapCreated() {
-    console.log('cukkoa');
     this.createCurrentMarker();
 
 
@@ -51,7 +50,6 @@ export default class GoogleMap extends React.Component {
       actionType: 'map-create'
     });
     console.log('did mount');
-    console.log('latlng: ' + this.state.latlng);
   }
 
   registerCallbacks() {
@@ -62,10 +60,8 @@ export default class GoogleMap extends React.Component {
   }
 
   onDirectionUpdated() {
-    console.log('direction is updated...');
     var direction = mapStore.getDirection();
     if (direction !== undefined && direction !== null) {
-      console.log('map', mapStore.getMap());
       this.directionsRenderer.setMap(mapStore.getMap());
       this.directionsRenderer.setDirections(direction);
     } else {

@@ -4,7 +4,7 @@ import Location from './components/location.jsx';
 import Weather from './components/weather.jsx';
 
 import Home from './partials/home.jsx';
-import Eat from './partials/eat.jsx';
+var Eat = require('./partials/eat.jsx');
 import Bar from './partials/bar.jsx';
 import Bicycle from './partials/bicycle.jsx';
 
@@ -14,7 +14,7 @@ import datamodel from './services/model.js';
 import FacebookLogin from './components/facebookLogin.jsx';
 import dispatcher from './services/tlocDispatcher.js';
 import geoService from './services/geoservice.js';
-
+var Breadcrumbs = require('react-breadcrumbs');
 
 var Route = Router.Route,
   DefaultRoute = Router.DefaultRoute,
@@ -34,20 +34,25 @@ var getApiLocation = function (results) {
 class App extends React.Component {
   render() {
     return <div>
-      <RouteHandler/>
+      <div className="row">
+        <div className="col-md-12 breadcrumb">
+          <Breadcrumbs />
+          </div>
+      </div>
+        <RouteHandler/>
     </div>
   }
 
 }
 
 var routes = (
-  <Route handler={App} path="/">
+  <Route handler={App} name="home" path="/">
     <Route name="eat" handler={Eat}/>
     <Route name="bar" handler={Bar}/>
     <Route name="bicycle" handler={Bicycle}/>
 
     <Route name="track" handler={Track}/>
-    <DefaultRoute handler={Home}/>
+    <DefaultRoute name="" handler={Home}/>
   </Route>
 );
 
