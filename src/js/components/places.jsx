@@ -209,10 +209,16 @@ class Places extends React.Component {
     }
   }
 
+  formatTime(timestamp){
+    return new Date(timestamp* 1000).toUTCString();
+  }
+
+
   renderDetails(restaurant, details) {
     if (details === undefined || details === null) {
       return '';
     }
+    var self = this;
     if (restaurant.placeid === details.place_id) {
       console.log(details);
       if (details.reviews === undefined || details.reviews === null) {
@@ -230,7 +236,7 @@ class Places extends React.Component {
             }
 
             return <blockquote>
-              <small><em>"{review.text}" </em> - {review.author_name}</small>
+              <small><em>"{review.text}" </em> - {review.author_name} {self.formatTime(review.time)} </small>
             </blockquote>
 
           })}</div> : ''}

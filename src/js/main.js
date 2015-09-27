@@ -37,6 +37,7 @@ class App extends React.Component {
       <div className="row">
         <div className="col-md-12 breadcrumb">
           <Breadcrumbs />
+          <hr />
           </div>
       </div>
         <RouteHandler/>
