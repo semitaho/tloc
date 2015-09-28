@@ -22,5 +22,10 @@ export default class Eat extends ReactComponent {
     </div>
   }
 
+  componentDidMount() {
+    ga('send', 'pageview', '/bar');
+
+  }
+
 
 }

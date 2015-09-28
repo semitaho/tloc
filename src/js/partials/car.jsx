@@ -25,6 +25,6 @@ export default class Car extends ReactComponent {
   }
 
   componentDidMount() {
-
+    ga('send', 'pageview', '/car');
   }
 }

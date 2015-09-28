@@ -25,6 +25,7 @@ export default class Eat extends ReactComponent {
   }
 
   componentDidMount() {
+    ga('send', 'pageview', '/eat');
 
   }
 
