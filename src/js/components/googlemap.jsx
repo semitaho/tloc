@@ -111,7 +111,7 @@ export default class GoogleMap extends React.Component {
     });
 
     marker.addListener('mouseup', function (event) {
-      mapStore.getMap().setCenter(event.latLng);
+      mapStore.getMap().panTo(event.latLng);
       this.centerChanged(event);
 
 

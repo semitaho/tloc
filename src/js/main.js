@@ -7,13 +7,14 @@ import Home from './partials/home.jsx';
 var Eat = require('./partials/eat.jsx');
 import Bar from './partials/bar.jsx';
 import Bicycle from './partials/bicycle.jsx';
-
+import Car from './partials/car.jsx';
 import Track from './partials/track.jsx';
 import Router from 'react-router';
 import datamodel from './services/model.js';
 import FacebookLogin from './components/facebookLogin.jsx';
 import dispatcher from './services/tlocDispatcher.js';
 import geoService from './services/geoservice.js';
+
 var Breadcrumbs = require('react-breadcrumbs');
 
 var Route = Router.Route,
@@ -38,9 +39,9 @@ class App extends React.Component {
         <div className="col-md-12 breadcrumb">
           <Breadcrumbs />
           <hr />
-          </div>
+        </div>
       </div>
-        <RouteHandler/>
+      <RouteHandler/>
     </div>
   }
 
@@ -53,6 +54,8 @@ var routes = (
     <Route name="bicycle" handler={Bicycle}/>
 
     <Route name="track" handler={Track}/>
+    <Route name="car" handler={Car}/>
+
     <DefaultRoute name="" handler={Home}/>
   </Route>
 );

@@ -220,11 +220,6 @@ class Places extends React.Component {
     }
     var self = this;
     if (restaurant.placeid === details.place_id) {
-      console.log(details);
-      if (details.reviews === undefined || details.reviews === null) {
-        return '';
-      }
-
       return <div className="panel panel-primary show-details">
         <div className="panel-heading">Details</div>
         {details.reviews !== undefined && details.reviews !== null ?
@@ -265,10 +260,11 @@ class Places extends React.Component {
       return;
     }
     var service = new google.maps.places.PlacesService(mapStore.getMap());
+    console.log('type', this.props.type);
     var request = {
       location: latlng,
       radius: '1500',
-      types: [this.props.type]
+      types: this.props.type
     };
     service.nearbySearch(request, this.itemsFound.bind(this));
   }
