@@ -18,7 +18,7 @@ export default class Eat extends ReactComponent {
           <GoogleMap />
         </div>
         <div className="col-md-6 col-sm-12 desc">
-          <Places type={['food']}/>
+          <Places type={['food','cafe']}/>
         </div>
       </div>
     </div>

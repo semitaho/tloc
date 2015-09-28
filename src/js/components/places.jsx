@@ -164,7 +164,7 @@ class Places extends React.Component {
         dropdownClass = 'dropdown open text-right';
       }
 
-      var items = <div className="list-group">
+      var items = <div className="list-group place">
         <div className={dropdownClass}>
           <button className="btn btn-default dropdown-toggle" aria-haspopup="true" aria-expanded="false" type="button"
                   onClick={this.toggleDropdown.bind(this)}>

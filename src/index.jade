@@ -3,9 +3,10 @@ html(lang="en")
   head
     meta(charset='utf-8')
     meta(name="viewport",content="width=device-width, initial-scale=1")
+    meta(name="description", content="Use tLoc application to recognize your current location and places of interests to find nearby like dinner places, bars, car dealerships etc.")
     link(rel='stylesheet', href='css/bootstrap/bootstrap.min.css')
     link(rel='stylesheet', href='css/tloc.css')
-    title tloc
+    title tLoc - find places of interests nearby
   body.container-fluid
 
     .row
@@ -13,9 +14,9 @@ html(lang="en")
         .fb-like(data-share="true", data-width="450", data-show-faces="true")
       .col-md-6.text-right
         #location
-     .row
-       .col-md-12
-         fb:login-button(scope="publicprofile,email")
+    .row
+      .col-md-12
+        fb:login-button(scope="publicprofile,email")
     .row
       .col-md-6.col-md-offset-3
         #weather
