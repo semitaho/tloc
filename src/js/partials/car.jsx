@@ -3,6 +3,7 @@ import $ from 'jquery';
 import Places from '../components/places.jsx';
 import GoogleMap from '../components/googlemap.jsx';
 import dispatcher  from '../services/tlocDispatcher.js';
+import ga from 'react-google-analytics';
 
 var ReactComponent = React.Component;
 
@@ -25,6 +26,6 @@ export default class Car extends ReactComponent {
   }
 
   componentDidMount() {
-    ga('send', 'pageview', '/car');
+    ga('send', 'pageview', {page: '/car'});
   }
 }

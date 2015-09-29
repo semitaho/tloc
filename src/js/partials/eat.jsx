@@ -3,6 +3,7 @@ import $ from 'jquery';
 import Places from '../components/places.jsx';
 import GoogleMap from '../components/googlemap.jsx';
 import dispatcher  from '../services/tlocDispatcher.js';
+import ga from 'react-google-analytics';
 
 var ReactComponent = React.Component;
 
@@ -25,7 +26,7 @@ export default class Eat extends ReactComponent {
   }
 
   componentDidMount() {
-    ga('send', 'pageview', '/eat');
+    ga('send', 'pageview', {page: '/eat', title: 'Go to eat'});
 
   }
 

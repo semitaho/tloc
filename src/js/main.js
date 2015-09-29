@@ -14,9 +14,10 @@ import datamodel from './services/model.js';
 import FacebookLogin from './components/facebookLogin.jsx';
 import dispatcher from './services/tlocDispatcher.js';
 import geoService from './services/geoservice.js';
+import ga from 'react-google-analytics';
 
 var Breadcrumbs = require('react-breadcrumbs');
-
+var GAInitializer = ga.Initializer;
 var Route = Router.Route,
   DefaultRoute = Router.DefaultRoute,
   RouteHandler = Router.RouteHandler;
@@ -35,6 +36,8 @@ var getApiLocation = function (results) {
 class App extends React.Component {
   render() {
     return <div>
+      <GAInitializer />
+
       <div className="row">
         <div className="col-md-12 breadcrumb">
           <Breadcrumbs />
@@ -43,6 +46,13 @@ class App extends React.Component {
       </div>
       <RouteHandler/>
     </div>
+  }
+
+  componentDidMount() {
+    ga('create', 'UA-68214703-1');
+    ga('send', 'pageview');
+    console.log('app initialized');
+
   }
 
 }
