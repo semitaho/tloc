@@ -11,7 +11,7 @@ class Places extends React.Component {
     super();
 
 
-    this.state = {items: [], active: null, details: null, dropdown: false, sortbyindex: 0, sortbytext: 'Sort by'};
+    this.state = {items: [], active: null, dropdown: false, sortbyindex: 0, sortbytext: 'Sort by'};
     this.fetchDetails.bind(this);
     mapStore.addListener('map-created', this.mapCreated.bind(this));
     dataModel.addListener('location-updated', this.locationUpdated.bind(this));
@@ -32,7 +32,7 @@ class Places extends React.Component {
     this.initItems();
   }
 
-  handleClick(event) {
+  handleClick(event, index) {
     var latlng = dataModel.getLocation();
 
     var start = new google.maps.LatLng(latlng.lat, latlng.lng);
@@ -52,20 +52,32 @@ class Places extends React.Component {
       }
     }.bind(this));
 
-    this.fetchDetails(event.placeid);
+    this.fetchDetails(event, index);
   }
 
-  fetchDetails(id) {
+  fetchDetails(place, index) {
+    place.showdetails = !place.showdetails;
+    var items = this.state.items;
     var self = this;
     var service = new google.maps.places.PlacesService(mapStore.getMap());
-    service.getDetails({
-      placeId: id
-    }, function (place, status) {
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-        var newDetails = $.extend(place, {showreviews: false});
-        self.setState({details: newDetails});
-      }
-    });
+    if (place.showdetails) {
+
+      service.getDetails({
+        placeId: place.placeid
+      }, function (details, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          place.details = details;
+          items[index] = place;
+
+          self.setState({items: items});
+        }
+      });
+    } else {
+      place.details = null;
+      items[index] = place;
+      self.setState({items: items});
+
+    }
 
   }
 
@@ -165,6 +177,7 @@ class Places extends React.Component {
       }
 
       var items = <div className="list-group place">
+
         <div className={dropdownClass}>
           <button className="btn btn-default dropdown-toggle" aria-haspopup="true" aria-expanded="false" type="button"
                   onClick={this.toggleDropdown.bind(this)}>
@@ -177,7 +190,7 @@ class Places extends React.Component {
             })}
           </ul>
         </div>
-        {sortedItems.map(function (restaurant) {
+        {sortedItems.map(function (restaurant, index) {
           var listClass = 'list-group-item';
           if (this.state.active === restaurant) {
             listClass += ' active';
@@ -188,8 +201,8 @@ class Places extends React.Component {
             stars = <small className="pull-right">{pointStr}</small>;
           }
 
-          var details = this.renderDetails(restaurant, this.state.details);
-          var restaurant = <a className={listClass} onClick={this.handleClick.bind(this,restaurant)}>
+          var details = this.renderDetails(restaurant);
+          var restaurant = <a className={listClass} onClick={this.handleClick.bind(this,restaurant, index)}>
             <h4 className="list-group-item-heading">{restaurant.name} {stars}</h4>
             <h5>{restaurant.vicinity}</h5>
 
@@ -215,17 +228,24 @@ class Places extends React.Component {
 
 
   renderDetails(restaurant, details) {
-    if (details === undefined || details === null) {
-      return '';
-    }
-    var self = this;
-    if (restaurant.placeid === details.place_id) {
-      return <div className="panel panel-primary show-details">
-        <div className="panel-heading">Details</div>
-        {details.reviews !== undefined && details.reviews !== null ?
 
-          <div className="list-group-item">
-            {details.reviews.map(review => {
+    var self = this;
+    if (restaurant.showdetails) {
+      return <div className="show-details">
+        {
+          restaurant.details.website !== undefined ?
+            <div className="list-group-item-text">Home page:  <a target="_blank"
+                                                                            href={restaurant.details.website}>{restaurant.details.website}</a>
+            </div> : ''
+        }
+        {
+          restaurant.details.international_phone_number !== undefined ?
+            <div className="list-group-item-text">Phone: {restaurant.details.international_phone_number}</div> : ''
+        }
+        {restaurant.details.reviews !== undefined && restaurant.details.reviews !== null ?
+
+          <div className="list-group-item-text">
+            {restaurant.details.reviews.map(review => {
               if (review.text === '' || review.text === null) {
                 return '';
               }
@@ -235,16 +255,7 @@ class Places extends React.Component {
               </blockquote>
 
             })}</div> : ''}
-        {
-          details.website !== undefined ?
-            <div className="list-group-item"><strong>Home page:</strong> <a target="_blank"
-                                                                            href={details.website}>{details.website}</a>
-            </div> : ''
-        }
-        {
-          details.international_phone_number !== undefined ?
-            <div className="list-group-item"><strong>Phone:</strong> {details.international_phone_number}</div> : ''
-        }
+
 
 
       </div>
@@ -260,7 +271,6 @@ class Places extends React.Component {
       return;
     }
     var service = new google.maps.places.PlacesService(mapStore.getMap());
-    console.log('type', this.props.type);
     var request = {
       location: latlng,
       radius: '1500',
@@ -282,6 +292,7 @@ class Places extends React.Component {
         name: result.name,
         vicinity: result.vicinity,
         isopen: isOpen,
+        showdetails: false,
         icon: result.icon,
         rating: result.rating,
         location: {lat: result.geometry.location.H, lng: result.geometry.location.L}
