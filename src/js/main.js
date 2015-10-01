@@ -1,7 +1,6 @@
 var React = require('react');
 //require('bootstrap');
 import Location from './components/location.jsx';
-import Weather from './components/weather.jsx';
 
 import Home from './partials/home.jsx';
 var Eat = require('./partials/eat.jsx');
@@ -111,7 +110,6 @@ var initApp = function () {
       lat: location.coords.latitude,
       lng: location.coords.longitude
     };
-    React.render(React.createElement(Weather), document.getElementById('weather'));
     React.render(React.createElement(Location), document.getElementById('location'));
 
     console.log('lat', latlng);

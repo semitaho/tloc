@@ -6,7 +6,7 @@ import geoStore from '../services/model.js';
 export default class Weather extends React.Component {
   constructor() {
     super();
-    this.state = {location: null, city: null};
+    this.state = {location: geoStore.getLocation(), city: geoStore.getApiLocation()};
   }
 
   render() {

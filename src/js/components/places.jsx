@@ -92,7 +92,7 @@ class Places extends React.Component {
         sorteditems = this.sortByDistance();
         break;
       case 2:
-        sorteditems = this.sortByDuration();
+        sorteditems = this.sortByName();
         break;
       case 3:
         sorteditems = this.sortByReview();
@@ -126,9 +126,9 @@ class Places extends React.Component {
 
   }
 
-  sortByDuration() {
+  sortByName() {
     this.state.items.sort(function (a, b) {
-      return a.duration.value - b.duration.value;
+      return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
     });
     return this.state.items;
 
@@ -209,8 +209,8 @@ class Places extends React.Component {
     }
   }
 
-  formatTime(timestamp){
-    return new Date(timestamp* 1000).toUTCString();
+  formatTime(timestamp) {
+    return new Date(timestamp * 1000).toUTCString();
   }
 
 
@@ -224,17 +224,17 @@ class Places extends React.Component {
         <div className="panel-heading">Details</div>
         {details.reviews !== undefined && details.reviews !== null ?
 
-        <div className="list-group-item">
-          {details.reviews.map(review => {
-            if (review.text === '' || review.text === null) {
-              return '';
-            }
+          <div className="list-group-item">
+            {details.reviews.map(review => {
+              if (review.text === '' || review.text === null) {
+                return '';
+              }
 
-            return <blockquote>
-              <small><em>"{review.text}" </em> - {review.author_name} {self.formatTime(review.time)} </small>
-            </blockquote>
+              return <blockquote>
+                <small><em>"{review.text}" </em> - {review.author_name} {self.formatTime(review.time)} </small>
+              </blockquote>
 
-          })}</div> : ''}
+            })}</div> : ''}
         {
           details.website !== undefined ?
             <div className="list-group-item"><strong>Home page:</strong> <a target="_blank"
@@ -321,9 +321,9 @@ class Places extends React.Component {
 }
 
 Places.defaultProps = {
-  sort: [{sortbyindex: 0, sortbytext: 'Default'}, {sortbyindex: 1, sortbytext: 'by distance'}, {
+  sort: [{sortbyindex: 0, sortbytext: 'default'}, {sortbyindex: 1, sortbytext: 'by distance'}, {
     sortbyindex: 2,
-    sortbytext: 'by duration'
+    sortbytext: 'by name'
   }, {
     sortbyindex: 3,
     sortbytext: 'by rating'
