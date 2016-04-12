@@ -43,14 +43,14 @@ class Places extends React.Component {
       travelMode: google.maps.TravelMode.WALKING
     };
     var directionsService = new google.maps.DirectionsService();
-    directionsService.route(request, function (result, status) {
+    directionsService.route(request, (result, status) => {
       if (status == google.maps.DirectionsStatus.OK) {
         dispatcher.dispatch({
           actionType: 'direction-update',
           direction: result
         });
       }
-    }.bind(this));
+    });
 
     this.fetchDetails(event, index);
   }

@@ -1,9 +1,10 @@
-var React = require('react');
-//require('bootstrap');
-import Location from './components/location.jsx';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { createStore, combineReducers, applyMiddleware } from 'redux'
 
+import Location from './components/location.jsx';
 import Home from './partials/home.jsx';
-var Eat = require('./partials/eat.jsx');
+import Eat from './partials/eat.jsx';
 import Bar from './partials/bar.jsx';
 import Bicycle from './partials/bicycle.jsx';
 import Car from './partials/car.jsx';
@@ -56,8 +57,8 @@ class App extends React.Component {
 
 }
 
-var routes = (
-  <Route handler={App} name="home" path="/">
+let routes = (
+  <Route  history={history} handler={App} name="home" path="/">
     <Route name="eat" handler={Eat}/>
     <Route name="bar" handler={Bar}/>
     <Route name="bicycle" handler={Bicycle}/>
@@ -121,11 +122,18 @@ var initApp = function () {
         apiLocation: done.apiLocation,
         city: done.location
       });
-      Router.run(routes, function (Handler) {
-        React.render(<Handler/>, document.getElementById('routing'));
-      });
-
-
+      ReactDOM.render(
+        <Provider store={store}>
+          { /* Tell the Router to use our enhanced history */ }
+          <Router history={history}>
+            <Route path="/" component={App}>
+              <Route path="foo" component={Foo}/>
+              <Route path="bar" component={Bar}/>
+            </Route>
+          </Router>
+        </Provider>,
+        document.getElementById('routing')
+      );
     });
 
 

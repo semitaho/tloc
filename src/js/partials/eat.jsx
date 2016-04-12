@@ -25,6 +25,10 @@ export default class Eat extends ReactComponent {
     </div>
   }
 
+  componentWillMount(){
+    
+  }
+
   componentDidMount() {
     ga('send', 'pageview', {page: '/eat', title: 'Go to eat'});
 
