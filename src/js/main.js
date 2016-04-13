@@ -2,25 +2,27 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {createStore, combineReducers, applyMiddleware} from 'redux';
-import {Router, DefaultRoute, Route, Link, browserHistory} from 'react-router';
+import {Router, IndexRoute, Route, Link, browserHistory} from 'react-router';
+import {syncHistoryWithStore, routerReducer} from 'react-router-redux'
+
 import Location from './components/location.jsx';
-
-
+var Breadcrumbs = require('react-breadcrumbs');
 
 
 import Home from './partials/home.jsx';
 class App extends React.Component {
   render() {
     return <div>
+      {/*
       <GAInitializer />
-
+       */}
       <div className="row">
         <div className="col-md-12 breadcrumb">
-          <Breadcrumbs />
+          <Breadcrumbs breadcrumbName="My breadcrumb name" />
           <hr />
         </div>
       </div>
-      <RouteHandler/>
+      {this.props.children}
     </div>
   }
 
@@ -34,34 +36,43 @@ class App extends React.Component {
 }
 
 
+/*
+ let routes = (
+ <Route history={history} handler={App} name="home" path="/">
+ {/*
+ <Route name="eat" handler={Eat}/>
+ <Route name="bar" handler={Bar}/>
+ <Route name="bicycle" handler={Bicycle}/>
 
-let routes = (
-  <Route history={history} handler={App} name="home" path="/">
-    {/*
-      <Route name="eat" handler={Eat}/>
-      <Route name="bar" handler={Bar}/>
-      <Route name="bicycle" handler={Bicycle}/>
-
-      <Route name="track" handler={Track}/>
-      <Route name="car" handler={Car}/>
-  */}
-    <DefaultRoute name="" handler={Home}/>
-  </Route>
-);
-
-function keijo(){
+ <Route name="track" handler={Track}/>
+ <Route name="car" handler={Car}/>
+ }
+ <DefaultRoute name="" handler={Home}/>
+ </Route>
+ );
+ */
+function keijo(state = {}, action) {
+  return state;
 
 }
 
-let store = createStore(keijo);
+const store = createStore(
+  combineReducers({
+    keijo,
+    routing: routerReducer
+  })
+);
+
+
+const history = syncHistoryWithStore(browserHistory, store);
+
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
       <Route path="/" component={App}>
-        <DefaultRoute name="" handler={Home}/>
+        <IndexRoute name="index" component={Home}/>
       </Route>
     </Router>
-
   </Provider>,
   document.getElementById('routing')
 );
@@ -81,7 +92,6 @@ ReactDOM.render(
  import geoService from './services/geoservice.js';
  import ga from 'react-google-analytics';
 
- var Breadcrumbs = require('react-breadcrumbs');
  var GAInitializer = ga.Initializer;
  var Route = Router.Route,
  DefaultRoute = Router.DefaultRoute,

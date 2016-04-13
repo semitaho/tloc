@@ -3,13 +3,15 @@ import $ from 'jquery';
 import Weather from '../components/weather.jsx';
 var ReactComponent = React.Component;
 
-export default class Home extends ReactComponent {
+export default class Home extends React.Component {
 
   render() {
     return <div>
       <div className="row">
         <div className="col-md-6 col-md-offset-3">
+          {/*
           <Weather />
+          */}
         </div>
       </div>
       <div className="row">
