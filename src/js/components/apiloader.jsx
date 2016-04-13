@@ -6,6 +6,7 @@ export default class ApiLoader extends React.Component {
     }
 
     render(){
+      
         return <div className="apiloader">Loading Api <strong>{this.props.name}</strong></div>;
     }
 

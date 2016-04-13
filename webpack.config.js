@@ -1,4 +1,5 @@
-var webpack = require("webpack");
+var webpack = require("webpack"),
+  path = require('path');
 
 module.exports = {
 
@@ -12,11 +13,12 @@ module.exports = {
       loader: "babel-loader"
     }]
   },
-  entry: "./src/js/tgames.js",
   devtool: "eval",
+  entry: __dirname +'/src/js/main.js',
   output: {
-    path: "./www/js",
-    filename: "main.js"
+    filename: "js/main.js",
+    path: __dirname +'/www',
+    publicPath: '/'
   },
   plugins: [
   //new webpack.optimize.UglifyJsPlugin({minimize: false, compress:{warnings: false}})

@@ -1,7 +1,6 @@
 import React from 'react';
 import GoogleMap from '../components/googlemap.jsx';
 import dataModel from '../services/model.js';
-import dispatcher from '../services/tlocDispatcher.js';
 import geoService from '../services/geoservice.js';
 import ApiLoader from '../components/apiloader.jsx';
 import mapStore from '../services/mapstore.js'
@@ -45,10 +44,12 @@ class Places extends React.Component {
     var directionsService = new google.maps.DirectionsService();
     directionsService.route(request, (result, status) => {
       if (status == google.maps.DirectionsStatus.OK) {
+        /*
         dispatcher.dispatch({
           actionType: 'direction-update',
           direction: result
         });
+*/
       }
     });
 

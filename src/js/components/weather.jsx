@@ -1,12 +1,11 @@
 import React from 'react';
 import ApiLoader from './apiloader.jsx';
 import $ from 'jquery';
-import geoStore from '../services/model.js';
 
 export default class Weather extends React.Component {
   constructor() {
     super();
-    this.state = {location: geoStore.getLocation(), city: geoStore.getApiLocation()};
+    //this.state = {location: geoStore.getLocation(), city: geoStore.getApiLocation()};
   }
 
   render() {
@@ -23,7 +22,7 @@ export default class Weather extends React.Component {
   }
 
   componentDidMount() {
-    geoStore.addListener('location-updated', this.onLocationChange.bind(this));
+    //geoStore.addListener('location-updated', this.onLocationChange.bind(this));
 
   }
 

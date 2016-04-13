@@ -25,9 +25,11 @@ var babel = require('gulp-babel'),
   concat = require('gulp-concat'),
   sourcemaps = require('gulp-sourcemaps'),
   webpack = require('webpack'),
+  webpackStream = require('webpack-stream'),
   WebpackDevServer = require('webpack-dev-server'),
-  webpackConfig = require("./webpack.config.js");
-
+  webpackConfig = require("./webpack.config.js"),
+  path = require('path'),
+  gutil = require('gulp-util');
 
 gulp.task('jade', function () {
   var compiledFiles = [watchfiles, '!**/layout.jade'];
@@ -40,21 +42,15 @@ gulp.task('jade', function () {
 });
 
 
-gulp.task('compilejs', function () {
+gulp.task('webpack', function () {
   gulp.src('./src/js/main.js')
-    .pipe(webpack({
-      module: {
-        loaders: [{
-          test: /\.jsx$/,
-          loader: "babel-loader"
-        },
-          {
-            test: /\.js$/,
-            loader: "babel-loader"
-          }]
+    .pipe(webpackStream(require('./webpack.config.js'), null, function (err, stats) {
+      console.log('err', err);
+      if (err) {
+        throw new Error('cannot do anything');
       }
     }))
-    .pipe(gulp.dest('www/'));
+    .pipe(gulp.dest('www/js'));
 
 
 });
@@ -74,7 +70,6 @@ gulp.task('copycss', function () {
 gulp.task('watch', function () {
   gulp.watch(watchfiles, ['jade']);
   gulp.watch(stylefiles, ['styles']);
-  gulp.watch([jsxfiles, jsfiles], ['compilejs']);
 
 
 });
@@ -86,36 +81,24 @@ gulp.task('styles', function () {
 });
 
 gulp.task('webserver', function () {
-  var myConfig = Object.create(webpackConfig);
+  var compiler = require('./webpack.config.js');
+  compiler.output.path = path.join(__dirname, "www/js");
+  compiler.entry = path.join(__dirname, 'src/js/main.js');
+    //compiler.output.path = webrootdir+'/js';
+    console.log('compiler', compiler);
 
-  var compiler = webpack({
-    module: {
-      loaders: [{
-        test: /\.jsx$/,
-        loader: "babel-loader"
-      },
-        {
-          test: /\.js$/,
-          loader: "babel-loader"
-        }]
-    },
-    entry: "./src/js/tgames.js",
-    devtool: "eval",
-    output: {
-      path: "./www/js",
-      filename: "main.js"
-    },
-    plugins: [
-      //new webpack.optimize.UglifyJsPlugin({minimize: false, compress:{warnings: false}})
-    ]
-  });
-
-  new WebpackDevServer(compiler, {
+  new WebpackDevServer(webpack(compiler), {
+    contentBase: 'www',
+    hot: true,
+    stats: 'errors-only',
+    inline: true
     // server and middleware options
   }).listen(9001, "0.0.0.0", function (err) {
     if (err) {
       console.log('error', err);
     }
+    gutil.log("[webpack-dev-server]", "http://localhost:9001/index.html");
+
   });
 });
 

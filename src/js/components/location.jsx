@@ -1,10 +1,9 @@
 import React from 'react';
 import $ from 'jquery';
-import geoStore from '../services/model.js';
+//import geoStore from '../services/model.js';
 var ReactComponent = React.Component;
 
 export default class Location extends ReactComponent {
-
   constructor() {
     super();
     this.onApiLocation = this.onApiLocation.bind(this);
@@ -13,6 +12,8 @@ export default class Location extends ReactComponent {
   }
 
   onApiLocation() {
+
+    
     console.log('on api location', geoStore.getApiLocation());
     this.setState({data: geoStore.getCity()});
   }

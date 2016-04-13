@@ -2,7 +2,6 @@ import React from 'react';
 import $ from 'jquery';
 import dataModel from '../services/model.js'
 import geoStore from '../services/model.js';
-import dispatcher from '../services/tlocDispatcher.js';
 import mapStore from '../services/mapstore.js';
 import geoService from '../services/geoservice.js';
 
@@ -20,12 +19,14 @@ export default class GoogleMap extends React.Component {
     if (event.latLng) {
       var latLng = {lat: event.latLng.H, lng: event.latLng.L};
       geoService.geocode(latLng, function (done) {
+        /*
         dispatcher.dispatch({
           actionType: 'location-update',
           location: done.latlng,
           apiLocation: done.apiLocation,
           city: done.location
         });
+*/
       });
 
     }
