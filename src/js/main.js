@@ -18,8 +18,7 @@ class App extends React.Component {
        */}
       <div className="row">
         <div className="col-md-12 breadcrumb">
-          <Breadcrumbs breadcrumbName="My breadcrumb name" />
-          <hr />
+          <Breadcrumbs routes={this.props.routes} />
         </div>
       </div>
       {this.props.children}
@@ -69,7 +68,7 @@ const history = syncHistoryWithStore(browserHistory, store);
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
-      <Route path="/" component={App}>
+      <Route path="/"  name="tloc" component={App}>
         <IndexRoute name="index" component={Home}/>
       </Route>
     </Router>
