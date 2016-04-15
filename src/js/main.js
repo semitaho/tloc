@@ -4,21 +4,20 @@ import {Provider} from 'react-redux';
 import {createStore, combineReducers, applyMiddleware} from 'redux';
 import {Router, IndexRoute, Route, Link, browserHistory} from 'react-router';
 import {syncHistoryWithStore, routerReducer} from 'react-router-redux'
-
+import geoService from './services/geoservice.js';
 import Location from './components/location.jsx';
 var Breadcrumbs = require('react-breadcrumbs');
-
 
 import Home from './partials/home.jsx';
 class App extends React.Component {
   render() {
     return <div>
       {/*
-      <GAInitializer />
+       <GAInitializer />
        */}
       <div className="row">
         <div className="col-md-12 breadcrumb">
-          <Breadcrumbs routes={this.props.routes} />
+          <Breadcrumbs routes={this.props.routes}/>
         </div>
       </div>
       {this.props.children}
@@ -33,7 +32,6 @@ class App extends React.Component {
   }
 
 }
-
 
 /*
  let routes = (
@@ -62,20 +60,27 @@ const store = createStore(
   })
 );
 
-
 const history = syncHistoryWithStore(browserHistory, store);
 
-ReactDOM.render(
-  <Provider store={store}>
-    <Router history={history}>
-      <Route path="/"  name="tloc" component={App}>
-        <IndexRoute name="index" component={Home}/>
-      </Route>
-    </Router>
-  </Provider>,
-  document.getElementById('routing')
-);
+geoService.getCurrentPosition()
+  .then(latlng => {
+    return geoService.geocode(latlng)
+  })
+  .then(data => {
+    console.log('data', data);
 
+    ReactDOM.render(
+      <Provider store={store}>
+        <Router history={history}>
+          <Route path="/" name="tloc" component={App}>
+            <IndexRoute name="index" component={Home}/>
+          </Route>
+        </Router>
+      </Provider>,
+      document.getElementById('routing')
+    );
+    
+  });
 
 /*
  import Eat from './partials/eat.jsx';
