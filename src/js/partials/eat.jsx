@@ -2,11 +2,12 @@ import React from 'react';
 import $ from 'jquery';
 import Places from '../components/places.jsx';
 import GoogleMap from '../components/googlemap.jsx';
-import ga from 'react-google-analytics';
+//import ga from 'react-google-analytics';
+import {connect} from 'react-redux'
 
 var ReactComponent = React.Component;
 
-export default class Eat extends ReactComponent {
+class Eat extends ReactComponent {
 
 
   render() {
@@ -24,14 +25,20 @@ export default class Eat extends ReactComponent {
     </div>
   }
 
-  componentWillMount(){
-    
+  componentWillMount() {
+
   }
 
   componentDidMount() {
-    ga('send', 'pageview', {page: '/eat', title: 'Go to eat'});
+    //   ga('send', 'pageview', {page: '/eat', title: 'Go to eat'});
 
   }
 
-
 }
+
+const mapStateToProps = (state) => {
+  return {};
+
+};
+
+export default connect(mapStateToProps)(Eat);

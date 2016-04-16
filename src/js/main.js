@@ -6,7 +6,7 @@ import {Router, IndexRoute, Route, Link, browserHistory} from 'react-router';
 import {syncHistoryWithStore, routerReducer} from 'react-router-redux'
 import geoService from './services/geoservice.js';
 import locationReducer from './reducers/locationReducer.js';
-import Location from './components/location.jsx';
+import Eat from './partials/eat.jsx';
 var Breadcrumbs = require('react-breadcrumbs');
 
 import Home from './partials/home.jsx';
@@ -78,18 +78,18 @@ geoService.getCurrentPosition()
       <Provider store={store}>
         <Router history={history}>
           <Route path="/" name="tloc" component={App}>
+            <Route name="eat" component={Eat} />
             <IndexRoute name="index" component={Home}/>
           </Route>
         </Router>
       </Provider>,
       document.getElementById('routing')
     );
-    
+
 
   });
 
 /*
- import Eat from './partials/eat.jsx';
  import Bar from './partials/bar.jsx';
 
  import Bicycle from './partials/bicycle.jsx';
