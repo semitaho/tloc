@@ -2,12 +2,12 @@ import React from 'react';
 import $ from 'jquery';
 import Weather from '../components/weather.jsx';
 var ReactComponent = React.Component;
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 
 class Home extends React.Component {
 
   render() {
-    let  {weather} = this.props;
+    let {weather} = this.props;
     return <div>
       <div className="row">
         <div className="col-md-6 col-md-offset-3">
@@ -37,7 +37,7 @@ class Home extends React.Component {
 const mapStateToProps = (state) => {
   return {
     weather: {
-
+      location: state.location
     }
   }
 

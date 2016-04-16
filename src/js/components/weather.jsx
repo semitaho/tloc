@@ -9,12 +9,12 @@ export default class Weather extends React.Component {
   }
 
   render() {
-    if (this.state.location === undefined || this.state.location === null) {
-      return <ApiLoader name="Weather"/>
-    }
+   console.log('props', this.props);
+
+    let {location} = this.props;
 
     var color = "#00aaff";
-    var url = 'http://forecast.io/embed/#lat=' + this.state.location.lat + '&lon=' + this.state.location.lng + '&name=' + this.state.city + '&color=' + color + '&units=' + this.props.unit;
+    var url = 'http://forecast.io/embed/#lat=' + location.latlng.lat+ '&lon=' + location.latlng.lng + '&name=' + location.location + '&color=' + color + '&units=' + this.props.unit;
     return (
       <iframe type='text/html' className="fe_container" height={this.props.height} width={this.props.width}
               frameBorder='0' src={url}/>

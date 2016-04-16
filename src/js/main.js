@@ -5,6 +5,7 @@ import {createStore, combineReducers, applyMiddleware} from 'redux';
 import {Router, IndexRoute, Route, Link, browserHistory} from 'react-router';
 import {syncHistoryWithStore, routerReducer} from 'react-router-redux'
 import geoService from './services/geoservice.js';
+import locationReducer from './reducers/locationReducer.js';
 import Location from './components/location.jsx';
 var Breadcrumbs = require('react-breadcrumbs');
 
@@ -48,17 +49,19 @@ class App extends React.Component {
  </Route>
  );
  */
-function keijo(state = {}, action) {
-  return state;
 
-}
 
 const store = createStore(
   combineReducers({
-    keijo,
+    location: locationReducer,
     routing: routerReducer
   })
 );
+
+store.subscribe(() => {
+  console.log('state', store.getState());
+
+});
 
 const history = syncHistoryWithStore(browserHistory, store);
 
@@ -68,6 +71,8 @@ geoService.getCurrentPosition()
   })
   .then(data => {
     console.log('data', data);
+    store.dispatch({type: 'RECEIVE_LOCATION', data});
+
 
     ReactDOM.render(
       <Provider store={store}>
@@ -80,6 +85,7 @@ geoService.getCurrentPosition()
       document.getElementById('routing')
     );
     
+
   });
 
 /*
