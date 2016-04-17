@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {createStore, combineReducers, applyMiddleware} from 'redux';
-import {Router, IndexRoute, Route, Link, browserHistory} from 'react-router';
+import {Router, IndexRoute, IndexRedirect, Route, Link, browserHistory} from 'react-router';
 import {syncHistoryWithStore, routerReducer} from 'react-router-redux'
 import geoService from './services/geoservice.js';
 import locationReducer from './reducers/locationReducer.js';
@@ -10,8 +10,11 @@ import Eat from './partials/eat.jsx';
 var Breadcrumbs = require('react-breadcrumbs');
 
 import Home from './partials/home.jsx';
+
+
 class App extends React.Component {
   render() {
+
     return <div>
       {/*
        <GAInitializer />
@@ -26,8 +29,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    ga('create', 'UA-68214703-1');
-    ga('send', 'pageview');
+   // ga('create', 'UA-68214703-1');
+   // ga('send', 'pageview');
     console.log('app initialized');
 
   }
@@ -73,13 +76,12 @@ geoService.getCurrentPosition()
     console.log('data', data);
     store.dispatch({type: 'RECEIVE_LOCATION', data});
 
-
     ReactDOM.render(
       <Provider store={store}>
         <Router history={history}>
-          <Route path="/" name="tloc" component={App}>
-            <Route name="eat" component={Eat} />
-            <IndexRoute name="index" component={Home}/>
+          <Route path="/" name="tloc"  component={App}>
+            <Route name="eat"  path="eat" component={Eat} />
+            <IndexRoute component={Home} />
           </Route>
         </Router>
       </Provider>,

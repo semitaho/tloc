@@ -3,6 +3,7 @@ import $ from 'jquery';
 import Weather from '../components/weather.jsx';
 var ReactComponent = React.Component;
 import {connect} from 'react-redux'
+import { Link, browserHistory } from 'react-router'
 
 class Home extends React.Component {
 
@@ -22,7 +23,7 @@ class Home extends React.Component {
           <div className="caption">
 
             <h1 className="text-center question">What do you want to do?</h1>
-            <a href="#/eat" className="btn btn-lg btn-info btn-block">Go to eat</a>
+            <Link to="#/eat" className="btn btn-lg btn-info btn-block">Go to eat</Link>
             <a href="#/bar" className="btn btn-lg btn-info btn-block">Go to bar</a>
             <a href="#/car" className="btn btn-lg btn-info btn-block">Find a car dealership nearby</a>
             <a href="#/bicycle" className="btn btn-lg btn-info btn-block">Go to fix the bike</a>

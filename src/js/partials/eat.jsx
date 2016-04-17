@@ -1,7 +1,8 @@
 import React from 'react';
 import $ from 'jquery';
-import Places from '../components/places.jsx';
-import GoogleMap from '../components/googlemap.jsx';
+//import Places from '../components/places.jsx';
+//import gmap from 'tcomponents';
+//import GoogleMap from '../components/googlemap.jsx';
 //import ga from 'react-google-analytics';
 import {connect} from 'react-redux'
 
@@ -19,7 +20,9 @@ class Eat extends ReactComponent {
           <GoogleMap />
         </div>
         <div className="col-md-6 col-sm-12 desc">
+          {/*
           <Places type={['food','cafe']}/>
+          */}
         </div>
       </div>
     </div>

@@ -53,12 +53,6 @@ export default class GoogleMap extends React.Component {
     console.log('did mount');
   }
 
-  registerCallbacks() {
-    mapStore.addListener('map-created', this.onMapCreated.bind(this));
-    mapStore.addListener('direction-updated', this.onDirectionUpdated.bind(this));
-    dataModel.addListener('location-updated', this.onLocationUpdated.bind(this));
-
-  }
 
   onDirectionUpdated() {
     var direction = mapStore.getDirection();
