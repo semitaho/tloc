@@ -1,8 +1,8 @@
 import React from 'react';
 import $ from 'jquery';
 //import Places from '../components/places.jsx';
-//import gmap from 'tcomponents';
-//import GoogleMap from '../components/googlemap.jsx';
+import {Gmap} from 'tcomponents';
+
 //import ga from 'react-google-analytics';
 import {connect} from 'react-redux'
 
@@ -17,7 +17,8 @@ class Eat extends ReactComponent {
 
       <div className="row">
         <div className="col-md-6 col-sm-12">
-          <GoogleMap />
+
+          <Gmap id="map"  {...this.props.map} />
         </div>
         <div className="col-md-6 col-sm-12 desc">
           {/*
@@ -29,6 +30,7 @@ class Eat extends ReactComponent {
   }
 
   componentWillMount() {
+    console.log('kokeillaas...');
 
   }
 
@@ -40,7 +42,16 @@ class Eat extends ReactComponent {
 }
 
 const mapStateToProps = (state) => {
-  return {};
+  console.log('state', state);
+  return {
+    map: {
+      marker: state.location.latlng,
+      center: state.location.latlng
+    },
+    places: {
+      
+    }
+  };
 
 };
 

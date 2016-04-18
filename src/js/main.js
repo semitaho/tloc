@@ -2,12 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {createStore, combineReducers, applyMiddleware} from 'redux';
-import {Router, IndexRoute, IndexRedirect, Route, Link, browserHistory} from 'react-router';
+import {Router, IndexRoute, IndexRedirect, Route, Link, hashHistory} from 'react-router';
 import {syncHistoryWithStore, routerReducer} from 'react-router-redux'
 import geoService from './services/geoservice.js';
 import locationReducer from './reducers/locationReducer.js';
 import Eat from './partials/eat.jsx';
-var Breadcrumbs = require('react-breadcrumbs');
+let Breadcrumbs = require('react-breadcrumbs');
 
 import Home from './partials/home.jsx';
 
@@ -29,8 +29,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-   // ga('create', 'UA-68214703-1');
-   // ga('send', 'pageview');
+    // ga('create', 'UA-68214703-1');
+    // ga('send', 'pageview');
     console.log('app initialized');
 
   }
@@ -66,7 +66,7 @@ store.subscribe(() => {
 
 });
 
-const history = syncHistoryWithStore(browserHistory, store);
+const history = syncHistoryWithStore(hashHistory, store);
 
 geoService.getCurrentPosition()
   .then(latlng => {
@@ -76,20 +76,18 @@ geoService.getCurrentPosition()
     console.log('data', data);
     store.dispatch({type: 'RECEIVE_LOCATION', data});
 
-    ReactDOM.render(
-      <Provider store={store}>
-        <Router history={history}>
-          <Route path="/" name="tloc"  component={App}>
-            <Route name="eat"  path="eat" component={Eat} />
-            <IndexRoute component={Home} />
-          </Route>
-        </Router>
-      </Provider>,
-      document.getElementById('routing')
-    );
-
-
   });
+ReactDOM.render(
+  <Provider store={store}>
+    <Router history={history}>
+      <Route path="/" name="tloc" component={App}>
+        <Route name="eat" path="eat" component={Eat}/>
+        <IndexRoute component={Home}/>
+      </Route>
+    </Router>
+  </Provider>,
+  document.getElementById('routing')
+);
 
 /*
  import Bar from './partials/bar.jsx';
