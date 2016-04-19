@@ -1,11 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
+import thunkMiddleware from 'redux-thunk';
 import {createStore, combineReducers, applyMiddleware} from 'redux';
 import {Router, IndexRoute, IndexRedirect, Route, Link, hashHistory} from 'react-router';
 import {syncHistoryWithStore, routerReducer} from 'react-router-redux'
 import geoService from './services/geoservice.js';
 import locationReducer from './reducers/locationReducer.js';
+import placesReducer from './reducers/placesReducer.js';
+
 import Eat from './partials/eat.jsx';
 let Breadcrumbs = require('react-breadcrumbs');
 
@@ -57,8 +60,10 @@ class App extends React.Component {
 const store = createStore(
   combineReducers({
     location: locationReducer,
+    places: placesReducer,
     routing: routerReducer
-  })
+  }),
+  applyMiddleware(thunkMiddleware)
 );
 
 store.subscribe(() => {

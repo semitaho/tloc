@@ -4,28 +4,13 @@ import $ from 'jquery';
 class Places extends React.Component {
   constructor() {
     super();
-
-
     this.state = {items: [], active: null, dropdown: false, sortbyindex: 0, sortbytext: 'Sort by'};
-    this.fetchDetails.bind(this);
-    mapStore.addListener('map-created', this.mapCreated.bind(this));
-    dataModel.addListener('location-updated', this.locationUpdated.bind(this));
-
   }
 
   componentDidMount() {
 
   }
 
-  mapCreated() {
-    console.log('map has been created');
-    this.initItems();
-  }
-
-  locationUpdated() {
-    console.log('places - location updated');
-    this.initItems();
-  }
 
   handleClick(event, index) {
     var latlng = dataModel.getLocation();
@@ -41,11 +26,11 @@ class Places extends React.Component {
     directionsService.route(request, (result, status) => {
       if (status == google.maps.DirectionsStatus.OK) {
         /*
-        dispatcher.dispatch({
-          actionType: 'direction-update',
-          direction: result
-        });
-*/
+         dispatcher.dispatch({
+         actionType: 'direction-update',
+         direction: result
+         });
+         */
       }
     });
 
@@ -166,57 +151,54 @@ class Places extends React.Component {
 
 
   render() {
-    if (this.state.items) {
-      var sortedItems = this.sortBy(this.state.items);
-      var dropdownClass = "dropdown text-right";
-      if (this.state.dropdown) {
-        dropdownClass = 'dropdown open text-right';
-      }
-
-      var items = <div className="list-group place">
-
-        <div className={dropdownClass}>
-          <button className="btn btn-default dropdown-toggle" aria-haspopup="true" aria-expanded="false" type="button"
-                  onClick={this.toggleDropdown.bind(this)}>
-            {this.state.sortbytext} <span className="caret"></span>
-          </button>
-          <ul className="dropdown-menu dropdown-menu-right">
-            {this.props.sort.map(criteria => {
-              return <li><a onClick={this.onSort.bind(this,criteria)}>{criteria.sortbytext}</a></li>
-
-            })}
-          </ul>
-        </div>
-        {sortedItems.map(function (restaurant, index) {
-          var listClass = 'list-group-item';
-          if (this.state.active === restaurant) {
-            listClass += ' active';
-          }
-          var stars = '';
-          if (restaurant.rating) {
-            var pointStr = restaurant.rating.toString() + ' / 5';
-            stars = <small className="pull-right">{pointStr}</small>;
-          }
-
-          var details = this.renderDetails(restaurant);
-          var restaurant = <a className={listClass} onClick={this.handleClick.bind(this,restaurant, index)}>
-            <h4 className="list-group-item-heading">{restaurant.name} {stars}</h4>
-            <h5>{restaurant.vicinity}</h5>
-
-            <p className="list-group-item-text">Distance: {restaurant.distance.text}</p>
-
-            <p className="list-group-item-text">Duration: {restaurant.duration.text}</p>
-            <b className="list-group-item-text">{restaurant.isopen}</b>
-            {details}
-
-          </a>;
-          return restaurant;
-        }.bind(this))}</div>
-      return items;
-
-    } else {
-      return <ApiLoader name="Places"/>
+    var sortedItems = this.sortBy(this.props.items);
+    var dropdownClass = "dropdown text-right";
+    if (this.state.dropdown) {
+      dropdownClass = 'dropdown open text-right';
     }
+
+    var items = <div className="list-group place">
+
+      <div className={dropdownClass}>
+        <button className="btn btn-default dropdown-toggle" aria-haspopup="true" aria-expanded="false" type="button"
+                onClick={this.toggleDropdown.bind(this)}>
+          {this.state.sortbytext} <span className="caret"></span>
+        </button>
+        <ul className="dropdown-menu dropdown-menu-right">
+          {this.props.sort.map(criteria => {
+            return <li><a onClick={this.onSort.bind(this,criteria)}>{criteria.sortbytext}</a></li>
+
+          })}
+        </ul>
+      </div>
+      {sortedItems.map(function (restaurant, index) {
+        var listClass = 'list-group-item';
+        if (this.state.active === restaurant) {
+          listClass += ' active';
+        }
+        var stars = '';
+        if (restaurant.rating) {
+          var pointStr = restaurant.rating.toString() + ' / 5';
+          stars = <small className="pull-right">{pointStr}</small>;
+        }
+
+        var details = this.renderDetails(restaurant);
+        var restaurant = <a className={listClass} onClick={this.handleClick.bind(this,restaurant, index)}>
+          <h4 className="list-group-item-heading">{restaurant.name} {stars}</h4>
+          <h5>{restaurant.vicinity}</h5>
+
+          <p className="list-group-item-text">Distance: {restaurant.distance.text}</p>
+
+          <p className="list-group-item-text">Duration: {restaurant.duration.text}</p>
+          <b className="list-group-item-text">{restaurant.isopen}</b>
+          {details}
+
+        </a>;
+        return restaurant;
+      }.bind(this))}</div>
+    return items;
+
+
   }
 
   formatTime(timestamp) {
@@ -231,8 +213,8 @@ class Places extends React.Component {
       return <div className="show-details">
         {
           restaurant.details.website !== undefined ?
-            <div className="list-group-item-text">Home page:  <a target="_blank"
-                                                                            href={restaurant.details.website}>{restaurant.details.website}</a>
+            <div className="list-group-item-text">Home page: <a target="_blank"
+                                                                href={restaurant.details.website}>{restaurant.details.website}</a>
             </div> : ''
         }
         {
@@ -252,7 +234,6 @@ class Places extends React.Component {
               </blockquote>
 
             })}</div> : ''}
-
 
 
       </div>
@@ -306,6 +287,8 @@ class Places extends React.Component {
 
   fillDistances(itemsNearby, destinations) {
     var service = new google.maps.DistanceMatrixService();
+
+
     service.getDistanceMatrix({
       origins: [dataModel.getLocation()],
       destinations: destinations,
