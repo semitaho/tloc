@@ -85,7 +85,6 @@ class Places extends React.Component {
         sorteditems = this.sortByReview(sorteditems);
         break;
     }
-    console.log('sorted items', sorteditems);
     return sorteditems;
 
 

@@ -56,12 +56,7 @@ export default class GoogleMap extends React.Component {
 
   onDirectionUpdated() {
     var direction = mapStore.getDirection();
-    if (direction !== undefined && direction !== null) {
-      this.directionsRenderer.setMap(mapStore.getMap());
-      this.directionsRenderer.setDirections(direction);
-    } else {
-      this.directionsRenderer.setMap(null);
-    }
+   
   }
 
   onLocationUpdated() {
