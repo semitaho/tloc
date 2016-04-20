@@ -4,13 +4,7 @@ import $ from 'jquery';
 class Places extends React.Component {
   constructor() {
     super();
-    this.state = {items: [], active: null, dropdown: false, sortbyindex: 0, sortbytext: 'Sort by'};
   }
-
-  componentDidMount() {
-
-  }
-
 
   handleClick(event, index) {
     var latlng = dataModel.getLocation();
@@ -39,7 +33,7 @@ class Places extends React.Component {
 
   fetchDetails(place, index) {
     place.showdetails = !place.showdetails;
-    var items = this.state.items;
+    var items = this.props.items;
     var self = this;
     var service = new google.maps.places.PlacesService(mapStore.getMap());
     if (place.showdetails) {
@@ -76,29 +70,29 @@ class Places extends React.Component {
 
   sortBy() {
     var baseSortBy = {dropdown: false};
-    var sorteditems = this.state.items;
-
-    switch (this.state.sortbyindex) {
+    let sorteditems = this.props.items.slice();
+    switch (this.props.sortbyindex) {
       case 0:
-        sorteditems = this.sortByDefault();
+        sorteditems = this.sortByDefault(sorteditems);
         break;
       case 1:
-        sorteditems = this.sortByDistance();
+        sorteditems = this.sortByDistance(sorteditems);
         break;
       case 2:
-        sorteditems = this.sortByName();
+        sorteditems = this.sortByName(sorteditems);
         break;
       case 3:
-        sorteditems = this.sortByReview();
+        sorteditems = this.sortByReview(sorteditems);
         break;
     }
+    console.log('sorted items', sorteditems);
     return sorteditems;
 
 
   }
 
-  sortByDefault() {
-    this.state.items.sort(function (a, b) {
+  sortByDefault(items) {
+    items.sort(function (a, b) {
       if (a.isopen !== b.isopen) {
         if (a.isopen === 'Open') {
           return -1;
@@ -116,7 +110,7 @@ class Places extends React.Component {
 
       return a.distance.value - b.distance.value;
     });
-    return this.state.items;
+    return items;
 
   }
 
@@ -151,9 +145,9 @@ class Places extends React.Component {
 
 
   render() {
-    var sortedItems = this.sortBy(this.props.items);
+    let sortedItems = this.sortBy(this.props.items);
     var dropdownClass = "dropdown text-right";
-    if (this.state.dropdown) {
+    if (this.props.dropdown) {
       dropdownClass = 'dropdown open text-right';
     }
 
@@ -162,7 +156,7 @@ class Places extends React.Component {
       <div className={dropdownClass}>
         <button className="btn btn-default dropdown-toggle" aria-haspopup="true" aria-expanded="false" type="button"
                 onClick={this.toggleDropdown.bind(this)}>
-          {this.state.sortbytext} <span className="caret"></span>
+          {this.props.sortbytext} <span className="caret"></span>
         </button>
         <ul className="dropdown-menu dropdown-menu-right">
           {this.props.sort.map(criteria => {
@@ -171,9 +165,9 @@ class Places extends React.Component {
           })}
         </ul>
       </div>
-      {sortedItems.map(function (restaurant, index) {
+      {sortedItems.map((restaurant, index) => {
         var listClass = 'list-group-item';
-        if (this.state.active === restaurant) {
+        if (this.props.active === restaurant) {
           listClass += ' active';
         }
         var stars = '';
@@ -183,7 +177,7 @@ class Places extends React.Component {
         }
 
         var details = this.renderDetails(restaurant);
-        var restaurant = <a className={listClass} onClick={this.handleClick.bind(this,restaurant, index)}>
+        let restaurantMapped = <a className={listClass} onClick={() => this.props.onItemClick(restaurant, index)}>
           <h4 className="list-group-item-heading">{restaurant.name} {stars}</h4>
           <h5>{restaurant.vicinity}</h5>
 
@@ -194,8 +188,8 @@ class Places extends React.Component {
           {details}
 
         </a>;
-        return restaurant;
-      }.bind(this))}</div>
+        return restaurantMapped;
+      })}</div>
     return items;
 
 

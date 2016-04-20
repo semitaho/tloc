@@ -1,5 +1,28 @@
+export function fetchDetails(map, restaurant, index) {
+  return (dispatch, getState) => {
+    let items = getState().places.items;
+    let latlng = getState().location.latlng;
+    let start = new google.maps.LatLng(latlng.lat, latlng.lng);
+    let end = new google.maps.LatLng(restaurant.location.lat, restaurant.location.lng);
+    let request = {
+      origin: start,
+      destination: end,
+      travelMode: google.maps.TravelMode.WALKING
+    };
+    let directionsService = new google.maps.DirectionsService();
+    return new Promise((resolve) => {
+      directionsService.route(request, (result, status) => {
+        if (status == google.maps.DirectionsStatus.OK) {
+          console.log('uusi result', result);
+        }
+      })
+
+    });
+  };
+}
+
+
 export function searchPlaces(map, types) {
-  console.log('search places', map);
   return (dispatch, getState) => {
     let location = getState().location.latlng;
     var service = new google.maps.places.PlacesService(map);
@@ -18,10 +41,11 @@ export function searchPlaces(map, types) {
       }).then(data => {
         return onDistance(data);
       }).then(results => {
-        return dispatch({
+        dispatch({
           type: 'RECEIVE_PLACES',
           places: results
         });
+        return Promise.resolve()
 
       });
   };

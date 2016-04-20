@@ -2,7 +2,7 @@ import React from 'react';
 import $ from 'jquery';
 import Places from '../components/places.jsx';
 import {Gmap} from 'tcomponents';
-import {searchPlaces} from './../actions/placesActions';
+import {searchPlaces, fetchDetails} from './../actions/placesActions';
 //import ga from 'react-google-analytics';
 import {connect} from 'react-redux';
 
@@ -26,9 +26,12 @@ class Eat extends ReactComponent {
           />
         </div>
         <div className="col-md-6 col-sm-12 desc">
-          {
-           <Places {...places}/>
-           }
+
+          <Places
+            {...places}
+            onItemClick={(restaurant, index) => dispatch(fetchDetails(restaurant, index )) }
+          />
+
         </div>
       </div>
     </div>
@@ -51,10 +54,9 @@ const mapStateToProps = (state) => {
   return {
     map: {
       marker: state.location.latlng,
-      center: state.location.latlng,
-      places: state.places
+      center: state.location.latlng
     },
-    places: {}
+    places: state.places
   };
 
 };

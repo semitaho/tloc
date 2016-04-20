@@ -8,6 +8,7 @@ import {syncHistoryWithStore, routerReducer} from 'react-router-redux'
 import geoService from './services/geoservice.js';
 import locationReducer from './reducers/locationReducer.js';
 import placesReducer from './reducers/placesReducer.js';
+import mapReducer from './reducers/mapReducer.js';
 
 import Eat from './partials/eat.jsx';
 let Breadcrumbs = require('react-breadcrumbs');
@@ -61,6 +62,7 @@ const store = createStore(
   combineReducers({
     location: locationReducer,
     places: placesReducer,
+    map: mapReducer,
     routing: routerReducer
   }),
   applyMiddleware(thunkMiddleware)
