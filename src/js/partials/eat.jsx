@@ -2,7 +2,7 @@ import React from 'react';
 import $ from 'jquery';
 import Places from '../components/places.jsx';
 import {Gmap} from 'tcomponents';
-import {fetchDirection} from './../actions/mapActions';
+import {fetchDirection, receiveMap} from './../actions/mapActions';
 import {searchPlaces, fetchDetails} from './../actions/placesActions';
 //import ga from 'react-google-analytics';
 import {connect} from 'react-redux';
@@ -23,6 +23,7 @@ class Eat extends ReactComponent {
           <Gmap
             id="map"
             {...map}
+            onMapCreated={map => dispatch(receiveMap(map))}
             onUpdated={(map) =>  dispatch(searchPlaces(map, ['food', 'cafe']))}
           />
         </div>
@@ -30,7 +31,10 @@ class Eat extends ReactComponent {
 
           <Places
             {...places}
-            onItemClick={(restaurant, index) => dispatch(fetchDirection(restaurant)) }
+            onItemClick={(restaurant, index) => {
+            dispatch(fetchDirection(restaurant))
+            dispatch(fetchDetails(restaurant, index))
+            } }
           />
 
         </div>
@@ -39,7 +43,6 @@ class Eat extends ReactComponent {
   }
 
   componentWillMount() {
-    console.log('kokeillaas...');
 
   }
 
@@ -51,7 +54,6 @@ class Eat extends ReactComponent {
 }
 
 const mapStateToProps = (state) => {
-  console.log('state', state);
   return {
     map: {
       marker: state.location.latlng,

@@ -1,26 +1,34 @@
-export function fetchDetails(map, restaurant, index) {
+export function fetchDetails(place, index) {
   return (dispatch, getState) => {
-    let items = getState().places.items;
-    let latlng = getState().location.latlng;
-    let start = new google.maps.LatLng(latlng.lat, latlng.lng);
-    let end = new google.maps.LatLng(restaurant.location.lat, restaurant.location.lng);
-    let request = {
-      origin: start,
-      destination: end,
-      travelMode: google.maps.TravelMode.WALKING
-    };
-    let directionsService = new google.maps.DirectionsService();
-    return new Promise((resolve) => {
-      directionsService.route(request, (result, status) => {
-        if (status == google.maps.DirectionsStatus.OK) {
-          console.log('uusi result', result);
-        }
-      })
+    let state = getState();
+    place.showdetails = !place.showdetails;
+    let items = state.places.items;
+    var self = this;
+    var service = new google.maps.places.PlacesService(state.map.map);
+    if (place.showdetails) {
 
-    });
+      service.getDetails({
+        placeId: place.placeid
+      }, (details, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          console.log('on details...', details);
+
+          dispatch(receiveDetails(details, index));
+        }
+      });
+    } else {
+      dispatch(receiveDetails(null, index));
+    }
   };
 }
 
+function receiveDetails(details, index) {
+  return {
+    type: 'TOGGLE_DETAILS',
+    index,
+    details
+  }
+}
 
 export function searchPlaces(map, types) {
   return (dispatch, getState) => {

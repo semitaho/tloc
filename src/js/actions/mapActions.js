@@ -5,8 +5,16 @@ export function fetchDirection(restaurant) {
   }
 }
 
+export function receiveMap(map) {
+  console.log('map', map);
+  return {
+    type: 'RECEIVE_MAP',
+    map
+  }
+}
+
 function receiveDirection(start, end) {
-    console.log('receive direction');
+  console.log('receive direction');
   return {
     type: 'RECEIVE_DIRECTION',
     direction: {
