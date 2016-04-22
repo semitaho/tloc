@@ -31,9 +31,9 @@ class Eat extends ReactComponent {
 
           <Places
             {...places}
-            onItemClick={(restaurant, index) => {
-            dispatch(fetchDirection(restaurant))
-            dispatch(fetchDetails(restaurant, index))
+            onItemClick={(restaurant) => {
+            dispatch(fetchDirection(restaurant));
+            dispatch(fetchDetails(restaurant))
             } }
           />
 

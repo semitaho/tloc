@@ -11,8 +11,7 @@ class Home extends React.Component {
     return <div>
       <div className="row">
         <div className="col-md-6 col-md-offset-3">
-
-          <Weather {...weather} />
+          {weather && weather.location && weather.location.latlng ? <Weather {...weather} /> : <div />}
 
         </div>
       </div>

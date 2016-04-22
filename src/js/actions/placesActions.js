@@ -1,18 +1,21 @@
-export function fetchDetails(place, index) {
+export function fetchDetails(place) {
   return (dispatch, getState) => {
     let state = getState();
-    place.showdetails = !place.showdetails;
+    let newPlace = Object.assign({}, place, {
+      showdetails: !place.showdetails
+    });
     let items = state.places.items;
     var self = this;
     var service = new google.maps.places.PlacesService(state.map.map);
-    if (place.showdetails) {
+    let index = items.findIndex((item) => item.placeid === newPlace.placeid);
+
+    if (newPlace.showdetails) {
 
       service.getDetails({
-        placeId: place.placeid
+        placeId: newPlace.placeid
       }, (details, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
           console.log('on details...', details);
-
           dispatch(receiveDetails(details, index));
         }
       });

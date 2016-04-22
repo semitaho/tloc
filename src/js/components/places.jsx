@@ -6,57 +6,7 @@ class Places extends React.Component {
     super();
   }
 
-  handleClick(event, index) {
-    var latlng = dataModel.getLocation();
-
-    var start = new google.maps.LatLng(latlng.lat, latlng.lng);
-    var end = new google.maps.LatLng(event.location.lat, event.location.lng);
-    var request = {
-      origin: start,
-      destination: end,
-      travelMode: google.maps.TravelMode.WALKING
-    };
-    var directionsService = new google.maps.DirectionsService();
-    directionsService.route(request, (result, status) => {
-      if (status == google.maps.DirectionsStatus.OK) {
-        /*
-         dispatcher.dispatch({
-         actionType: 'direction-update',
-         direction: result
-         });
-         */
-      }
-    });
-
-    this.fetchDetails(event, index);
-  }
-
-  fetchDetails(place, index) {
-    place.showdetails = !place.showdetails;
-    var items = this.props.items;
-    var self = this;
-    var service = new google.maps.places.PlacesService(mapStore.getMap());
-    if (place.showdetails) {
-
-      service.getDetails({
-        placeId: place.placeid
-      }, function (details, status) {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-          place.details = details;
-          items[index] = place;
-
-          self.setState({items: items});
-        }
-      });
-    } else {
-      place.details = null;
-      items[index] = place;
-      self.setState({items: items});
-
-    }
-
-  }
-
+  
   toggleDropdown() {
     var dropdown = this.state.dropdown;
     this.setState({dropdown: !dropdown});
