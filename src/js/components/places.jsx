@@ -6,16 +6,13 @@ class Places extends React.Component {
     super();
   }
 
-  
-  toggleDropdown() {
-    var dropdown = this.state.dropdown;
-    this.setState({dropdown: !dropdown});
-
-  }
 
   onSort(criteria) {
-    var stateObject = $.extend(criteria, {dropdown: false});
-    this.setState(stateObject);
+    this.props.toggleDropdown(false);
+    let sortBy = criteria.sortbyindex;
+    this.props.onSort(sortBy);
+    //  var stateObject = $.extend(criteria, {dropdown: false});
+    //  this.setState(stateObject);
   }
 
   sortBy() {
@@ -63,24 +60,24 @@ class Places extends React.Component {
 
   }
 
-  sortByName() {
-    this.state.items.sort(function (a, b) {
+  sortByName(items) {
+    items.sort(function (a, b) {
       return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
     });
-    return this.state.items;
+    return items;
 
   }
 
-  sortByDistance() {
-    this.state.items.sort(function (a, b) {
+  sortByDistance(items) {
+    items.sort(function (a, b) {
       return a.distance.value - b.distance.value;
     });
-    return this.state.items;
+    return items;
 
   }
 
-  sortByReview() {
-    this.state.items.sort(function (a, b) {
+  sortByReview(items) {
+    items.sort(function (a, b) {
       if (a.rating === undefined) {
         return 1;
       }
@@ -89,7 +86,7 @@ class Places extends React.Component {
       }
       return b.rating - a.rating;
     });
-    return this.state.items;
+    return items;
   }
 
 
@@ -104,7 +101,7 @@ class Places extends React.Component {
 
       <div className={dropdownClass}>
         <button className="btn btn-default dropdown-toggle" aria-haspopup="true" aria-expanded="false" type="button"
-                onClick={this.toggleDropdown.bind(this)}>
+                onClick={()=> this.props.toggleDropdown(!this.props.dropdown)}>
           {this.props.sortbytext} <span className="caret"></span>
         </button>
         <ul className="dropdown-menu dropdown-menu-right">

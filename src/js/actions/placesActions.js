@@ -15,7 +15,6 @@ export function fetchDetails(place) {
         placeId: newPlace.placeid
       }, (details, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-          console.log('on details...', details);
           dispatch(receiveDetails(details, index));
         }
       });
@@ -33,9 +32,24 @@ function receiveDetails(details, index) {
   }
 }
 
-export function searchPlaces(map, types) {
+export function toggleDropdown(value) {
+  return {
+    type: 'TOGGLE_DROPDOWN',
+    value
+  };
+}
+
+export function receiveSortByIndex(index){
+  return {
+    type: 'RECEIVE_SORTBY_INDEX',
+    index
+  };
+}
+
+export function searchPlaces(types) {
   return (dispatch, getState) => {
     let location = getState().location.latlng;
+    let map = getState().map.map;
     var service = new google.maps.places.PlacesService(map);
     var request = {
       location,
@@ -69,7 +83,6 @@ function itemsFound(results) {
       isOpen = result.opening_hours.open_now ? 'Open' : 'Closed';
     }
     //  if (result.photos)
-    //  console.log(result.photos[0].getUrl({'maxWidth': 100, 'maxHeight': 100}));
     return {
       placeid: result.place_id,
       name: result.name,

@@ -2,8 +2,10 @@ import React from 'react';
 import $ from 'jquery';
 import Places from '../components/places.jsx';
 import {Gmap} from 'tcomponents';
-import {fetchDirection, receiveMap} from './../actions/mapActions';
-import {searchPlaces, fetchDetails} from './../actions/placesActions';
+import {receiveLocationData} from './../actions/locationActions.js';
+
+import {receiveDirection, fetchDirection, receiveMap} from './../actions/mapActions';
+import {searchPlaces, fetchDetails, toggleDropdown,receiveSortByIndex} from './../actions/placesActions';
 //import ga from 'react-google-analytics';
 import {connect} from 'react-redux';
 
@@ -24,13 +26,22 @@ class Eat extends ReactComponent {
             id="map"
             {...map}
             onMapCreated={map => dispatch(receiveMap(map))}
-            onUpdated={(map) =>  dispatch(searchPlaces(map, ['food', 'cafe']))}
+            onUpdated={(map) =>  dispatch(searchPlaces(['food', 'cafe']))}
+            onMapClick={event => {
+             let latLng = {lat: event.latLng.lat(), lng: event.latLng.lng()};
+             console.log('lat l', latLng);
+             dispatch(receiveDirection(latLng, null));
+             dispatch(receiveLocationData(event.latLng))
+           
+            }}
           />
         </div>
         <div className="col-md-6 col-sm-12 desc">
 
           <Places
             {...places}
+            toggleDropdown={value => dispatch(toggleDropdown(value))}
+            onSort={sortByIndex => dispatch(receiveSortByIndex(sortByIndex))}
             onItemClick={(restaurant) => {
             dispatch(fetchDirection(restaurant));
             dispatch(fetchDetails(restaurant))

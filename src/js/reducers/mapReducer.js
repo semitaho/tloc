@@ -6,7 +6,7 @@ export default function mapReducer(state = initialState, action) {
   if (action.type === 'RECEIVE_MAP') {
     console.log('RECEIVING MAP');
     return Object.assign({}, state, {map: action.map});
-
   }
+  
   return state;
 }
