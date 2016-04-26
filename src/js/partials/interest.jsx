@@ -32,11 +32,6 @@ class Interest extends ReactComponent {
 
               }
             }
-            onMapDestroyed={() => {
-              console.log('on map destroyed');
-              dispatch(receiveMap(null));
-
-            }}
             onCenterChanged={() => dispatch(searchPlaces(types))}
             onMapClick={event => {
              let latLng = {lat: event.latLng.lat(), lng: event.latLng.lng()};
@@ -79,6 +74,9 @@ class Interest extends ReactComponent {
 
   componentWillUnmount() {
     console.log('UNMOUNT');
+    let {types, dispatch} = this.props;
+    dispatch(receiveMap(null));
+
   }
 
 
