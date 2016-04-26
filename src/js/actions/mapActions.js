@@ -21,7 +21,7 @@ export function receiveLocation(location) {
 
 }
 
-export function receiveDirection(start, end) {
+export function receiveDirection(start=null, end=null) {
   console.log('receive direction', start);
   return {
     type: 'RECEIVE_DIRECTION',

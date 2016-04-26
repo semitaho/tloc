@@ -34,7 +34,6 @@ export default class GoogleMap extends React.Component {
 
 
   render() {
-    console.log('googlemap - on render');
     return <div id="map"></div>
   }
 

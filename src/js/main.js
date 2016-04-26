@@ -9,8 +9,9 @@ import geoService from './services/geoservice.js';
 import locationReducer from './reducers/locationReducer.js';
 import placesReducer from './reducers/placesReducer.js';
 import mapReducer from './reducers/mapReducer.js';
-
 import Eat from './partials/eat.jsx';
+import Bar from './partials/bar.jsx';
+import Interest from './partials/interest.jsx';
 let Breadcrumbs = require('react-breadcrumbs');
 
 import Home from './partials/home.jsx';
@@ -35,8 +36,6 @@ class App extends React.Component {
   componentDidMount() {
     // ga('create', 'UA-68214703-1');
     // ga('send', 'pageview');
-    console.log('app initialized');
-
   }
 
 }
@@ -74,13 +73,11 @@ store.subscribe(() => {
 });
 
 const history = syncHistoryWithStore(hashHistory, store);
-
 geoService.getCurrentPosition()
   .then(latlng => {
     return geoService.geocode(latlng)
   })
   .then(data => {
-    console.log('data', data);
     store.dispatch({type: 'RECEIVE_LOCATION', data});
 
   });
@@ -89,6 +86,7 @@ ReactDOM.render(
     <Router history={history}>
       <Route path="/" name="tloc" component={App}>
         <Route name="eat" path="eat" component={Eat}/>
+        <Route name="bar" path="bar" component={Bar}/>
         <IndexRoute component={Home}/>
       </Route>
     </Router>
@@ -187,26 +185,6 @@ ReactDOM.render(
  }, undefined, {enableHighAccuracy: true});
  };
 
-
- window.fbAsyncInit = function () {
- FB.init({
- appId: '928749127211404',
- xfbml: true,
- version: 'v2.4'
- });
- checkLogin();
- };
-
- (function (d, s, id) {
- var js, fjs = d.getElementsByTagName(s)[0];
- if (d.getElementById(id)) {
- return;
- }
- js = d.createElement(s);
- js.id = id;
- js.src = "//connect.facebook.net/en_US/sdk.js";
- fjs.parentNode.insertBefore(js, fjs);
- }(document, 'script', 'facebook-jssdk'));
 
 
  */

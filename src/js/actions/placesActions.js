@@ -48,11 +48,16 @@ export function receiveSortByIndex(index){
 
 export function searchPlaces(types) {
   return (dispatch, getState) => {
-    let location = getState().location.latlng;
+    let state = getState();
+    if (!state.location.latlng || !state.map.map){
+      return;
+    }
+    let location = state.location.latlng;
     let map = getState().map.map;
     var service = new google.maps.places.PlacesService(map);
     var request = {
       location,
+      language: 'fi',
       radius: '1500',
       types
     };
